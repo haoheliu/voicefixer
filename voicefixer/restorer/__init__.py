@@ -21,7 +21,7 @@ meta = {
 
 if (not os.path.exists(meta["voicefixer_fe"]['path'])):
     os.makedirs(os.path.dirname(meta["voicefixer_fe"]['path']), exist_ok=True)
-    print("Downloading the weight of voicefixer_fe")
-    cmd = "wget https://zenodo.org/record/5175846/files/epoch%3D33-val_loss%3D0.4293_trimed.ckpt?download=1 -O " + \
+    print("Downloading the main structure of voicefixer")
+    cmd = "wget https://zenodo.org/record/5469951/files/epoch%3D15_trimed_bn.ckpt?download=1 -O " + \
           meta["voicefixer_fe"]['path']
     os.system(cmd)

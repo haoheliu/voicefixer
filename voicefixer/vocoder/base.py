@@ -1,5 +1,5 @@
 from voicefixer.vocoder.model.generator import Generator
-from voicefixer.tools.wav import *
+from voicefixer.tools.wav import read_wave,save_wave
 from voicefixer.tools.pytorch_util import *
 from voicefixer.vocoder.model.util import *
 from voicefixer.vocoder.config import Config
