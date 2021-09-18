@@ -14,6 +14,6 @@ from voicefixer import VoiceFixer
 
 voicefixer = VoiceFixer()
 
-voicefixer.restore(input="/Users/liuhaohe/Downloads/p361_056.wav",
-                   output="/Users/liuhaohe/Downloads/p361_056_out.wav",
-                   cuda=False)
+voicefixer.restore(input="/Users/liuhaohe/Desktop/test_song.wav",
+                   output="/Users/liuhaohe/Desktop/test_song_out_2.wav",
+                   cuda=False,mode=1)

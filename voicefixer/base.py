@@ -69,6 +69,8 @@ class VoiceFixer():
             self._model.train() # More effective on seriously demaged speech
         elif(mode == 2):
             self._model.generator.denoiser.train() # Another option worth trying
+        else:
+            self._model.eval()
 
         with torch.no_grad():
             wav_10k = self._load_wav(input, sample_rate=44100)
