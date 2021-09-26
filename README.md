@@ -1,3 +1,5 @@
+# [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HYYUepIsl2aXsdET6P_AmNVXuWP1MCMf?usp=sharing)
+
 # VoiceFixer
 *Voicefixer* aims at the restoration of human speech regardless how serious its degraded. It can handle noise, reveberation, low resolution (2kHz~44.1kHz) and clipping (0.1-1.0 threshold) effect within one model.
 
@@ -29,6 +31,10 @@ vocoder.oracle(fpath="", # input wav file path
 [![46dMxH.png](https://z3.ax1x.com/2021/09/26/46dMxH.png)](https://imgtu.com/i/46dMxH)
 
 
+## Related Material
+
+- Paper: Will be available before Oct.03.2021.
+- Train & Evaluation pipline (Still working on it): https://github.com/haoheliu/voicefixer_main
 
 
 
