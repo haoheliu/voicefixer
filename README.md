@@ -3,6 +3,10 @@
 
 [![46dAq1.png](https://z3.ax1x.com/2021/09/26/46dAq1.png)](https://imgtu.com/i/46dAq1)
 
+## Demo
+
+Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to view what voicefixer can do.
+
 ## Usage
 ```python
 from voicefixer import VoiceFixer
