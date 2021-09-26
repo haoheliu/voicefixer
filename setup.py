@@ -37,7 +37,7 @@ VERSION = '0.0.5'
 REQUIRED = [
     "librosa>=0.8.1",
     "matplotlib",
-    "torch>=1.8.0",
+    "torch>=1.7.0",
     "torchaudio",
     "progressbar",
     "pytorch_lightning",
