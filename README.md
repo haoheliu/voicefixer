@@ -55,16 +55,8 @@ vocoder.oracle(fpath="", # input wav file path
 >       primaryClass={cs.SD}  
 >   }
 
-
 [![46dnPO.png](https://z3.ax1x.com/2021/09/26/46dnPO.png)](https://imgtu.com/i/46dnPO)
 [![46dMxH.png](https://z3.ax1x.com/2021/09/26/46dMxH.png)](https://imgtu.com/i/46dMxH)
-
-
-## Related Material
-
-- Paper: Will be available before Oct.03.2021.
-- Train & Evaluation pipline (Still working on it): https://github.com/haoheliu/voicefixer_main
-
 
 
 
