@@ -26,10 +26,25 @@ from voicefixer import Vocoder
 # Initialize model
 voicefixer = VoiceFixer()
 # Speech restoration
+
+# Mode 0
 voicefixer.restore(input="", # input wav file path
                    output="", # output wav file path
                    cuda=False, # whether to use gpu acceleration
-                   mode = 0) # You can try out mode 0, 1 to find out the best result
+                   mode = 0) # You can try out mode 0, 1, 2 to find out the best result
+# Mode 1
+voicefixer.restore(input="", # input wav file path
+                   output="", # output wav file path
+                   cuda=False, # whether to use gpu acceleration
+                   mode = 1) # You can try out mode 0, 1, 2 to find out the best result
+# Mode 2
+voicefixer.restore(input="", # input wav file path
+                   output="", # output wav file path
+                   cuda=False, # whether to use gpu acceleration
+                   mode = 2) # You can try out mode 0, 1, 2 to find out the best result
+
+
+
 
 # Universal speaker independent vocoder
 vocoder = Vocoder(sample_rate=44100) # Only 44100 sampling rate is supported.

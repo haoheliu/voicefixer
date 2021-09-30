@@ -61,19 +61,41 @@ class VoiceFixer():
         # return models.to_log(sp), models.to_log(mel_orig)
         return sp, mel_orig
 
+    def remove_higher_frequency(self, wav, ratio=0.95):
+        stft = librosa.stft(wav)
+        real, img = np.real(stft), np.imag(stft)
+        mag = (real ** 2 + img ** 2) ** 0.5
+        cos, sin = real / mag, img / mag
+        spec = np.abs(stft)  # [1025,T]
+        feature = spec.copy()
+        feature = np.log10(feature)
+        feature[feature < 0] = 0
+        energy_level = np.sum(feature, axis=1)
+        threshold = np.sum(energy_level) * ratio
+        curent_level, i = energy_level[0], 0
+        while (i < energy_level.shape[0] and curent_level < threshold):
+            curent_level += energy_level[i + 1, ...]
+            i += 1
+        spec[i:, ...] = np.zeros_like(spec[i:, ...])
+        stft = spec * cos + 1j * spec * sin
+        return librosa.istft(stft)
+
     def restore(self, input, output, cuda=False, mode=0):
         if(cuda and torch.cuda.is_available()):
             self._model = self._model.cuda()
         # metrics = {}
-        if(mode == 1):
-            self._model.train() # More effective on seriously demaged speech
-        elif(mode == 2):
-            self._model.generator.denoiser.train() # Another option worth trying
-        else:
+        if(mode == 0):
             self._model.eval()
+        elif(mode == 1):
+            self._model.eval()
+        elif(mode == 2):
+            self._model.train() # More effective on seriously demaged speech
 
         with torch.no_grad():
             wav_10k = self._load_wav(input, sample_rate=44100)
+            if(mode == 0):
+                # print("In mode 0, we will remove part of the higher frequency part before processing")
+                wav_10k = self.remove_higher_frequency(wav_10k)
             res = []
             seg_length = 44100*60
             break_point = seg_length
