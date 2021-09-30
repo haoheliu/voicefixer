@@ -1,4 +1,4 @@
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HYYUepIsl2aXsdET6P_AmNVXuWP1MCMf?usp=sharing) [![PyPI version](https://badge.fury.io/py/voicefixer.svg)](https://badge.fury.io/py/voicefixer)
+[![arXiv](https://img.shields.io/badge/arXiv-2109.13731-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2109.13731) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HYYUepIsl2aXsdET6P_AmNVXuWP1MCMf?usp=sharing) [![PyPI version](https://badge.fury.io/py/voicefixer.svg)](https://badge.fury.io/py/voicefixer) [![githubio](https://img.shields.io/badge/GitHub.io-Audio_Samples-blue?logo=Github&style=flat-square)](https://haoheliu.github.io/demopage-voicefixer)
 
 # VoiceFixer
 
@@ -90,14 +90,16 @@ Note:
 - Demo page: https://haoheliu.github.io/demopage-voicefixer/ 
 - If you found this repo helpful, please consider citing
 
->   @misc{liu2021voicefixer,   
->       title={VoiceFixer: Toward General Speech Restoration With Neural Vocoder},   
->       author={Haohe Liu and Qiuqiang Kong and Qiao Tian and Yan Zhao and DeLiang Wang and Chuanzeng Huang and Yuxuan Wang},  
->       year={2021},  
->       eprint={2109.13731},  
->       archivePrefix={arXiv},  
->       primaryClass={cs.SD}  
->   }
+```bib
+ @misc{liu2021voicefixer,   
+     title={VoiceFixer: Toward General Speech Restoration With Neural Vocoder},   
+     author={Haohe Liu and Qiuqiang Kong and Qiao Tian and Yan Zhao and DeLiang Wang and Chuanzeng Huang and Yuxuan Wang},  
+     year={2021},  
+     eprint={2109.13731},  
+     archivePrefix={arXiv},  
+     primaryClass={cs.SD}  
+ }
+```
 
 [![46dnPO.png](https://z3.ax1x.com/2021/09/26/46dnPO.png)](https://imgtu.com/i/46dnPO)
 [![46dMxH.png](https://z3.ax1x.com/2021/09/26/46dMxH.png)](https://imgtu.com/i/46dMxH)
