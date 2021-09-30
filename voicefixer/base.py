@@ -80,7 +80,7 @@ class VoiceFixer():
         stft = spec * cos + 1j * spec * sin
         return librosa.istft(stft)
 
-    def restore(self, input, output, cuda=False, mode=0):
+    def restore(self, input, output, cuda=False, mode=0, your_vocoder_func=None):
         if(cuda and torch.cuda.is_available()):
             self._model = self._model.cuda()
         # metrics = {}
@@ -106,7 +106,10 @@ class VoiceFixer():
                 denoised_mel = from_log(out_model['mel'])
                 # if(meta["unify_energy"]):
                 #    denoised_mel, mel_noisy = self.amp_to_original_f(mel_sp_est=denoised_mel,mel_sp_target=mel_noisy)
-                out = self._model.vocoder(denoised_mel)
+                if(your_vocoder_func is None):
+                    out = self._model.vocoder(denoised_mel)
+                else:
+                    out = your_vocoder_func(denoised_mel)
                 # unify energy
                 if(torch.max(torch.abs(out)) > 1.0):
                     out = out / torch.max(torch.abs(out))

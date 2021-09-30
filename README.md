@@ -16,7 +16,7 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 
 ## Usage
 
-- Basic example:
+### Basic example:
 
 ```python
 # Will automatically download model parameters.
@@ -56,6 +56,35 @@ wave = vocoder.forward(mel=mel_spec) # This forward function is used in the foll
 vocoder.oracle(fpath="", # input wav file path
                out_path="") # output wav file path
 ```
+
+### Others
+
+- How to use your own vocoder, like pre-trained HiFi-Gan?
+
+First you need to write a following helper function with your model. Similar to the helper function in this repo: https://github.com/haoheliu/voicefixer/blob/main/voicefixer/vocoder/base.py#L35
+
+```shell script
+    def convert_mel_to_wav(mel):
+        """
+        :param non normalized mel spectrogram: [batchsize, 1, t-steps, n_mel]
+        :return: [batchsize, 1, samples]
+        """
+        return wav
+```
+
+Then pass this function to *voicefixer.restore*, for example:
+```
+voicefixer.restore(input="", # input wav file path
+                   output="", # output wav file path
+                   cuda=False, # whether to use gpu acceleration
+                   mode = 0,
+                   your_vocoder_func = convert_mel_to_wav)
+```
+
+Note: 
+- For compatibility, your vocoder should working on 44.1kHz wave with mel frequency bins 128. 
+- The input mel spectrogram to the helper function should not be normalized by the width of each mel filter. 
+
 ## Materials
 - Voicefixer training: https://github.com/haoheliu/voicefixer_main.git
 - Demo page: https://haoheliu.github.io/demopage-voicefixer/ 
