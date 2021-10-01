@@ -31,7 +31,7 @@ if w:
     st.write('Inference : ')
     
     # choose options
-    mode = st.radio('Voice fixer mode (0: rm high frequency, 1: none, 2: train fixer)', [0, 1, 2])
+    mode = st.radio('Voice fixer modes (0: original mode, 1: Add preprocessing module 2: Train mode (may work sometimes on seriously degraded speech))', [0, 1, 2])
     if torch.cuda.is_available():
         is_cuda = st.radio('Turn on GPU', [True, False])
         if is_cuda != list(voice_fixer._model.parameters())[0].is_cuda:
@@ -62,5 +62,5 @@ if w:
     # make buffer
     with BytesIO() as buffer:
         soundfile.write(buffer, pred_wav.T, samplerate=sample_rate, format='WAV')
-        st.write("Time: {:.3f}".format(pred_time))
+        st.write("Time: {:.3f}s".format(pred_time))
         st.audio(buffer.getvalue(), format='audio/wav')

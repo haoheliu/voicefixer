@@ -65,10 +65,10 @@ class VoiceFixer():
         stft = librosa.stft(wav)
         real, img = np.real(stft), np.imag(stft)
         mag = (real ** 2 + img ** 2) ** 0.5
-        cos, sin = real / mag, img / mag
+        cos, sin = real / (mag+EPS), img / (mag+EPS)
         spec = np.abs(stft)  # [1025,T]
         feature = spec.copy()
-        feature = np.log10(feature)
+        feature = np.log10(feature+EPS)
         feature[feature < 0] = 0
         energy_level = np.sum(feature, axis=1)
         threshold = np.sum(energy_level) * ratio
@@ -76,6 +76,7 @@ class VoiceFixer():
         while (i < energy_level.shape[0] and curent_level < threshold):
             curent_level += energy_level[i + 1, ...]
             i += 1
+        print(i)
         spec[i:, ...] = np.zeros_like(spec[i:, ...])
         stft = spec * cos + 1j * spec * sin
         return librosa.istft(stft)
@@ -92,13 +93,13 @@ class VoiceFixer():
         elif(mode == 2):
             self._model.train() # More effective on seriously demaged speech
 
-        if(mode == 0):
-            wav_10k = self.remove_higher_frequency(wav_10k)
         res = []
-        seg_length = 44100*60
+        seg_length = 44100*30
         break_point = seg_length
         while break_point < wav_10k.shape[0]+seg_length:
             segment = wav_10k[break_point-seg_length:break_point]
+            if (mode == 1):
+                segment = self.remove_higher_frequency(segment)
             sp,mel_noisy = self._pre(self._model, segment, cuda)
             out_model = self._model(sp, mel_noisy)
             denoised_mel = from_log(out_model['mel'])

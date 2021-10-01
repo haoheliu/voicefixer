@@ -54,17 +54,17 @@ from voicefixer import Vocoder
 voicefixer = VoiceFixer()
 # Speech restoration
 
-# Mode 0
+# Mode 0: Original Model (suggested by default)
 voicefixer.restore(input="", # input wav file path
                    output="", # output wav file path
                    cuda=False, # whether to use gpu acceleration
                    mode = 0) # You can try out mode 0, 1, 2 to find out the best result
-# Mode 1
+# Mode 1: Add preprocessing module (remove higher frequency)
 voicefixer.restore(input="", # input wav file path
                    output="", # output wav file path
                    cuda=False, # whether to use gpu acceleration
                    mode = 1) # You can try out mode 0, 1, 2 to find out the best result
-# Mode 2
+# Mode 2: Train mode (might work sometimes on seriously degraded real speech)
 voicefixer.restore(input="", # input wav file path
                    output="", # output wav file path
                    cuda=False, # whether to use gpu acceleration
