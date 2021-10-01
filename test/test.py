@@ -14,6 +14,16 @@ from voicefixer import VoiceFixer
 
 voicefixer = VoiceFixer()
 
-voicefixer.restore(input="/Users/liuhaohe/Downloads/lieshi_short.wav",
-                   output="/Users/liuhaohe/Downloads/lieshi_short.wav",
+voicefixer.restore(input="/Users/liuhaohe/Downloads/vocals.wav",
+                   output="/Users/liuhaohe/Downloads/vocals_mode_0.wav",
+                   cuda=False,mode=0)
+
+
+voicefixer.restore(input="/Users/liuhaohe/Downloads/vocals.wav",
+                   output="/Users/liuhaohe/Downloads/vocals_mode_1.wav",
+                   cuda=False,mode=1)
+
+
+voicefixer.restore(input="/Users/liuhaohe/Downloads/vocals.wav",
+                   output="/Users/liuhaohe/Downloads/vocals_mode_2.wav",
                    cuda=False,mode=2)

@@ -37,6 +37,8 @@ if w:
         if is_cuda != list(voice_fixer._model.parameters())[0].is_cuda:
             device = 'cuda' if is_cuda else 'cpu'
             voice_fixer._model = voice_fixer._model.to(device)
+    else:
+        is_cuda=False
 
     t1 = time.time()
     

@@ -14,20 +14,28 @@ This package provides:
 
 Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to view what voicefixer can do.
 
-
-You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
-
-```
-# install additional web package
-$ pip install streamlit
-# you can run after installing voice_fixer package 
-$ streamlit run test/streamlit.py
-```
-
-
 ## Usage
 
-### Basic example:
+Install voicefixer first:
+```shell script
+pip install voicefixer
+```
+
+### Desktop App
+
+You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
+```shell script
+# Install additional web package
+pip install streamlit
+# Run streamlit 
+streamlit run test/streamlit.py
+```
+**Important:** When you run the above command for the first time, the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
+ 
+
+### Python interface
+
+Basic example: 
 
 ```python
 # Will automatically download model parameters.
@@ -54,8 +62,8 @@ voicefixer.restore(input="", # input wav file path
                    cuda=False, # whether to use gpu acceleration
                    mode = 2) # You can try out mode 0, 1, 2 to find out the best result
 
-
-
+# Another similar function
+# voicefixer.restore_inmem()
 
 # Universal speaker independent vocoder
 vocoder = Vocoder(sample_rate=44100) # Only 44100 sampling rate is supported.
