@@ -18,9 +18,10 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
 
 ```
-# install web package
+# install additional web package
 $ pip install streamlit
-$ streamlit run streamlit.py
+# you can run after installing voice_fixer package 
+$ streamlit run test/streamlit.py
 ```
 
 
