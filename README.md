@@ -1,5 +1,13 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2109.13731-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2109.13731) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HYYUepIsl2aXsdET6P_AmNVXuWP1MCMf?usp=sharing) [![PyPI version](https://badge.fury.io/py/voicefixer.svg)](https://badge.fury.io/py/voicefixer) [![githubio](https://img.shields.io/badge/GitHub.io-Audio_Samples-blue?logo=Github&style=flat-square)](https://haoheliu.github.io/demopage-voicefixer)
-
+ 
+- [VoiceFixer](#voicefixer)
+  * [Demo](#demo)
+  * [Usage](#usage)
+    + [Desktop App](#desktop-app)
+    + [Python interface](#python-interface)
+    + [Others Features](#others-features)
+  * [Materials](#materials)
+   
 # VoiceFixer
 
 This package provides: 
@@ -76,7 +84,7 @@ vocoder.oracle(fpath="", # input wav file path
                out_path="") # output wav file path
 ```
 
-### Others
+### Others Features
 
 - How to use your own vocoder, like pre-trained HiFi-Gan?
 
