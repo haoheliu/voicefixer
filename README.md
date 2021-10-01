@@ -24,14 +24,20 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 
 ## Usage
 
-Install voicefixer first:
+You need first install voicefixer via pip:
 ```shell script
 pip install voicefixer
 ```
 
 ### Desktop App
-
 You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
+
+1. Clone the repo first.
+```shell script
+git clone https://github.com/haoheliu/voicefixer.git
+cd voicefixer
+```
+2. Initialize and start web page.
 ```shell script
 # Install additional web package
 pip install streamlit
@@ -43,7 +49,7 @@ streamlit run test/streamlit.py
 
 ### Python interface
 
-Basic example: 
+Basic examples: 
 
 ```python
 # Will automatically download model parameters.
