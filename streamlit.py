@@ -34,6 +34,9 @@ if w:
     mode = st.radio('Voice fixer mode (0: rm high frequency, 1: none, 2: train fixer)', [0, 1, 2])
     if torch.cuda.is_available():
         is_cuda = st.radio('Turn on GPU', [True, False])
+        if is_cuda != list(voice_fixer._model.parameters())[0].is_cuda:
+            device = 'cuda' if is_cuda else 'cpu'
+            voice_fixer._model = voice_fixer._model.to(device)
 
     t1 = time.time()
     
