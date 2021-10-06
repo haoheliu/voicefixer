@@ -1,13 +1,13 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2109.13731-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2109.13731) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HYYUepIsl2aXsdET6P_AmNVXuWP1MCMf?usp=sharing) [![PyPI version](https://badge.fury.io/py/voicefixer.svg)](https://badge.fury.io/py/voicefixer) [![githubio](https://img.shields.io/badge/GitHub.io-Audio_Samples-blue?logo=Github&style=flat-square)](https://haoheliu.github.io/demopage-voicefixer)
  
 - [VoiceFixer](#voicefixer)
-  * [Demo](#demo)
-  * [Usage](#usage)
-    + [Desktop App](#desktop-app)
-    + [Python interface](#python-interface)
-    + [Others Features](#others-features)
-  * [Materials](#materials)
-   
+  - [Demo](#demo)
+  - [Usage](#usage)
+    - [Desktop App](#desktop-app)
+    - [Python Examples](#python-examples)
+    - [Others Features](#others-features)
+  - [Materials](#materials)
+  
 # VoiceFixer
 
 This package provides: 
@@ -47,7 +47,7 @@ streamlit run test/streamlit.py
 **Important:** When you run the above command for the first time, the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
  
 
-### Example 
+### Python Examples 
 
 - *test/test.py*:
 
@@ -66,7 +66,6 @@ for mode in [0,1,2]:
                        cuda=False, # GPU acceleration
                        mode=mode)
 
-
 # TEST VOCODER
 ## Initialize a vocoder. Only 44100 sampling rate is supported.
 vocoder = Vocoder(sample_rate=44100)
@@ -81,6 +80,8 @@ vocoder.oracle(fpath=os.path.join(git_root,"test/utterance/original/original.fla
 # vocoder.forward 
 ...
 ```
+
+You can clone this repo and try to run test.py inside the *test* folder.
 
 ### Others Features
 
