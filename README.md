@@ -52,8 +52,8 @@ streamlit run test/streamlit.py
 Run the following test script after cloning this repo.
 
 ```shell script
-git clone https://github.com/haoheliu/voicefixer.git
-cd voicefixer
+pip install voicefixer
+git clone https://github.com/haoheliu/voicefixer.git; cd voicefixer
 python3 test/test.py # test script
 ```
 We expect it will give you the following output:

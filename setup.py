@@ -31,7 +31,7 @@ URL = 'https://github.com/haoheliu/voicefixer'
 EMAIL = 'haoheliu@gmail.com'
 AUTHOR = 'Haohe Liu'
 REQUIRES_PYTHON = '>=3.7.0'
-VERSION = '0.0.8'
+VERSION = '0.0.10'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
@@ -42,6 +42,7 @@ REQUIRED = [
     "progressbar",
     "pytorch_lightning",
     "torchlibrosa==0.0.7",
+    "GitPython",
 ]
 
 # What packages are optional?
