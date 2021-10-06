@@ -10,20 +10,53 @@
 9/14/21 11:02 AM   Haohe Liu      1.0         None
 '''
 
-from voicefixer import VoiceFixer
+import git
+import os
+import librosa
+import numpy as np
+from voicefixer import VoiceFixer, Vocoder
 
+git_root = git.Repo("", search_parent_directories=True).git.rev_parse("--show-toplevel")
+os.makedirs(os.path.join(git_root,"test/utterance/output"),exist_ok=True)
+
+def check(fname):
+    """
+    check if the output is normal
+    """
+    output = os.path.join(git_root,"test/utterance/output",fname)
+    target = os.path.join(git_root, "test/utterance/target", fname)
+    output, _ = librosa.load(output,sr=44100)
+    target, _ = librosa.load(target, sr=44100)
+    assert np.mean(np.abs(output-target)) < 0.01
+
+# TEST VOICEFIXER
+## Initialize a voicefixer
 voicefixer = VoiceFixer()
+# Mode 0: Original Model (suggested by default)
+# Mode 1: Add preprocessing module (remove higher frequency)
+# Mode 2: Train mode (might work sometimes on seriously degraded real speech)
+for mode in [0,1,2]:
+    voicefixer.restore(input=os.path.join(git_root,"test/utterance/original/original.flac"), # low quality .wav/.flac file
+                       output=os.path.join(git_root,"test/utterance/output/output_mode_"+str(mode)+".flac"), # save file path
+                       cuda=False, # GPU acceleration
+                       mode=mode)
+    if(mode != 2):
+        check("output_mode_"+str(mode)+".flac")
 
-voicefixer.restore(input="/Users/liuhaohe/Downloads/vocals.wav",
-                   output="/Users/liuhaohe/Downloads/vocals_mode_0.wav",
-                   cuda=False,mode=0)
 
+# TEST VOCODER
+## Initialize a vocoder
+vocoder = Vocoder(sample_rate=44100)
 
-voicefixer.restore(input="/Users/liuhaohe/Downloads/vocals.wav",
-                   output="/Users/liuhaohe/Downloads/vocals_mode_1.wav",
-                   cuda=False,mode=1)
+### read wave (fpath) -> mel spectrogram -> vocoder -> wave -> save wave (out_path)
+vocoder.oracle(fpath=os.path.join(git_root,"test/utterance/original/original.flac"),
+               out_path=os.path.join(git_root,"test/utterance/output/oracle.flac"),
+               cuda=False) # GPU acceleration
 
+# Another interface
+# vocoder.forward(mel=mel)
 
-voicefixer.restore(input="/Users/liuhaohe/Downloads/vocals.wav",
-                   output="/Users/liuhaohe/Downloads/vocals_mode_2.wav",
-                   cuda=False,mode=2)
+check("oracle.flac")
+
+print("Pass")
+

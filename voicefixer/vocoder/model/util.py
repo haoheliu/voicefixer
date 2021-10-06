@@ -1,4 +1,5 @@
 from voicefixer.vocoder.config import Config
+from voicefixer.tools.pytorch_util import try_tensor_cuda,check_cuda_availability
 import torch
 import librosa
 import numpy as np
@@ -62,17 +63,19 @@ def tr_pre(npy):
     zeros = torch.zeros([conditions.size()[0], Config.num_mels, pad_tail]).type_as(conditions) + -4.0
     return torch.cat([conditions, zeros], dim=-1)
 
-def pre(npy, device = torch.device("cuda" if torch.cuda.is_available() else "cpu")):
+def pre(npy, cuda):
     conditions = npy
     ## padding tail
     if(type(conditions) == np.ndarray):
-        conditions = torch.FloatTensor(conditions).unsqueeze(0).to(device)
+        conditions = torch.FloatTensor(conditions).unsqueeze(0)
     else:
-        conditions = torch.FloatTensor(conditions.float()).unsqueeze(0).to(device)
+        conditions = torch.FloatTensor(conditions.float()).unsqueeze(0)
+    try_tensor_cuda(conditions, cuda=cuda)
     conditions = conditions.transpose(1, 2)
     l = conditions.size(-1)
     pad_tail = l % 2 + 4
-    zeros = torch.zeros([1, Config.num_mels, pad_tail]).to(device) + -4.0
+    zeros = torch.zeros([1, Config.num_mels, pad_tail]) + -4.0
+    try_tensor_cuda(zeros, cuda=cuda)
     return torch.cat([conditions, zeros], dim=-1)
 
 def load_try(state, model):

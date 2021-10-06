@@ -47,47 +47,39 @@ streamlit run test/streamlit.py
 **Important:** When you run the above command for the first time, the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
  
 
-### Python interface
+### Example 
 
-Basic examples: 
+- *test/test.py*:
 
 ```python
-# Will automatically download model parameters.
-from voicefixer import VoiceFixer
-from voicefixer import Vocoder
+...
 
-# Initialize model
+# TEST VOICEFIXER
+## Initialize a voicefixer
 voicefixer = VoiceFixer()
-# Speech restoration
+## Mode 0: Original Model (suggested by default)
+## Mode 1: Add preprocessing module (remove higher frequency)
+## Mode 2: Train mode (might work sometimes on seriously degraded real speech)
+for mode in [0,1,2]:
+    voicefixer.restore(input=os.path.join(git_root,"test/utterance/original/original.flac"), # low quality .wav/.flac file
+                       output=os.path.join(git_root,"test/utterance/output/output_mode_"+str(mode)+".flac"), # save file path
+                       cuda=False, # GPU acceleration
+                       mode=mode)
 
-# Mode 0: Original Model (suggested by default)
-voicefixer.restore(input="", # input wav file path
-                   output="", # output wav file path
-                   cuda=False, # whether to use gpu acceleration
-                   mode = 0) # You can try out mode 0, 1, 2 to find out the best result
-# Mode 1: Add preprocessing module (remove higher frequency)
-voicefixer.restore(input="", # input wav file path
-                   output="", # output wav file path
-                   cuda=False, # whether to use gpu acceleration
-                   mode = 1) # You can try out mode 0, 1, 2 to find out the best result
-# Mode 2: Train mode (might work sometimes on seriously degraded real speech)
-voicefixer.restore(input="", # input wav file path
-                   output="", # output wav file path
-                   cuda=False, # whether to use gpu acceleration
-                   mode = 2) # You can try out mode 0, 1, 2 to find out the best result
 
-# Another similar function
-# voicefixer.restore_inmem()
+# TEST VOCODER
+## Initialize a vocoder. Only 44100 sampling rate is supported.
+vocoder = Vocoder(sample_rate=44100)
 
-# Universal speaker independent vocoder
-vocoder = Vocoder(sample_rate=44100) # Only 44100 sampling rate is supported.
+### read wave (fpath) -> mel spectrogram -> vocoder -> wave -> save wave (out_path)
+vocoder.oracle(fpath=os.path.join(git_root,"test/utterance/original/original.flac"),
+               out_path=os.path.join(git_root,"test/utterance/output/oracle.flac"),
+               cuda=False) # GPU acceleration
 
-# Convert mel spectrogram to waveform
-wave = vocoder.forward(mel=mel_spec) # This forward function is used in the following oracle function.
-
-# Test vocoder using the mel spectrogram of 'fpath', save output to file out_path
-vocoder.oracle(fpath="", # input wav file path
-               out_path="") # output wav file path
+# Other interfaces
+# voicefixer.restore_inmem
+# vocoder.forward 
+...
 ```
 
 ### Others Features

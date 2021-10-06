@@ -76,23 +76,20 @@ class VoiceFixer():
         while (i < energy_level.shape[0] and curent_level < threshold):
             curent_level += energy_level[i + 1, ...]
             i += 1
-        print(i)
         spec[i:, ...] = np.zeros_like(spec[i:, ...])
         stft = spec * cos + 1j * spec * sin
         return librosa.istft(stft)
 
     @torch.no_grad()
     def restore_inmem(self, wav_10k, cuda=False, mode=0, your_vocoder_func=None):
-        if(cuda and torch.cuda.is_available()):
-            self._model = self._model.cuda()
-        # metrics = {}
+        check_cuda_availability(cuda=cuda)
+        try_tensor_cuda(self._model,cuda=cuda)
         if(mode == 0):
             self._model.eval()
         elif(mode == 1):
             self._model.eval()
         elif(mode == 2):
             self._model.train() # More effective on seriously demaged speech
-
         res = []
         seg_length = 44100*30
         break_point = seg_length
