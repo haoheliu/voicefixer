@@ -49,35 +49,58 @@ streamlit run test/streamlit.py
 
 ### Python Examples 
 
-- *test/test.py*:
+Run the following test script after cloning this repo.
+
+```shell script
+git clone https://github.com/haoheliu/voicefixer.git
+cd voicefixer
+python3 test/test.py # test script
+```
+We expect it will give you the following output:
+```shell script
+Initializing VoiceFixer...
+Test voicefixer mode 0, Pass
+Test voicefixer mode 1, Pass
+Test voicefixer mode 2, Pass
+Initializing 44.1kHz speech vocoder...
+Test vocoder using groundtruth mel spectrogram...
+Pass
+```
+*test/test.py* mainly contains the test of the following two APIs:
+- voicefixer.restore
+- vocoder.oracle
 
 ```python
 ...
 
 # TEST VOICEFIXER
 ## Initialize a voicefixer
+print("Initializing VoiceFixer...")
 voicefixer = VoiceFixer()
-## Mode 0: Original Model (suggested by default)
-## Mode 1: Add preprocessing module (remove higher frequency)
-## Mode 2: Train mode (might work sometimes on seriously degraded real speech)
+# Mode 0: Original Model (suggested by default)
+# Mode 1: Add preprocessing module (remove higher frequency)
+# Mode 2: Train mode (might work sometimes on seriously degraded real speech)
 for mode in [0,1,2]:
+    print("Testing mode",mode)
     voicefixer.restore(input=os.path.join(git_root,"test/utterance/original/original.flac"), # low quality .wav/.flac file
                        output=os.path.join(git_root,"test/utterance/output/output_mode_"+str(mode)+".flac"), # save file path
                        cuda=False, # GPU acceleration
                        mode=mode)
+    if(mode != 2):
+        check("output_mode_"+str(mode)+".flac")
+    print("Pass")
 
 # TEST VOCODER
-## Initialize a vocoder. Only 44100 sampling rate is supported.
+## Initialize a vocoder
+print("Initializing 44.1kHz speech vocoder...")
 vocoder = Vocoder(sample_rate=44100)
 
 ### read wave (fpath) -> mel spectrogram -> vocoder -> wave -> save wave (out_path)
-vocoder.oracle(fpath=os.path.join(git_root,"test/utterance/original/original.flac"),
+print("Test vocoder using groundtruth mel spectrogram...")
+vocoder.oracle(fpath=os.path.join(git_root,"test/utterance/original/p360_001_mic1.flac"),
                out_path=os.path.join(git_root,"test/utterance/output/oracle.flac"),
                cuda=False) # GPU acceleration
 
-# Other interfaces
-# voicefixer.restore_inmem
-# vocoder.forward 
 ...
 ```
 
