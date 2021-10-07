@@ -26,7 +26,7 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 
 You need first install voicefixer via pip:
 ```shell script
-pip install voicefixer
+pip install voicefixer==0.0.10
 ```
 
 ### Desktop App
@@ -49,10 +49,9 @@ streamlit run test/streamlit.py
 
 ### Python Examples 
 
-Run the following test script after cloning this repo.
+Run the following scripts for a test run:
 
 ```shell script
-pip install voicefixer==0.0.10
 git clone https://github.com/haoheliu/voicefixer.git; cd voicefixer
 python3 test/test.py # test script
 ```
