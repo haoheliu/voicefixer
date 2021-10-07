@@ -26,7 +26,7 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 
 You need first install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.0.11
+pip install voicefixer==0.0.12
 ```
 
 ### Desktop App
