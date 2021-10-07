@@ -39,8 +39,8 @@ class Vocoder(nn.Module):
         """
         assert mel.size()[-1] == 128
         check_cuda_availability(cuda=cuda)
-        try_tensor_cuda(self.model,cuda=cuda)
-        try_tensor_cuda(mel,cuda=cuda)
+        self.model = try_tensor_cuda(self.model,cuda=cuda)
+        mel = try_tensor_cuda(mel,cuda=cuda)
         self.weight_torch = self.weight_torch.type_as(mel)
         mel = mel / self.weight_torch
         mel = tr_normalize(tr_amp_to_db(torch.abs(mel)) - 20.0)
@@ -50,14 +50,14 @@ class Vocoder(nn.Module):
 
     def oracle(self, fpath, out_path, cuda=False):
         check_cuda_availability(cuda=cuda)
-        try_tensor_cuda(self.model,cuda=cuda)
+        self.model = try_tensor_cuda(self.model,cuda=cuda)
         wav = read_wave(fpath, sample_rate=self.rate)[..., 0]
         wav = wav/np.max(np.abs(wav))
         stft = np.abs(librosa.stft(wav,hop_length=Config.hop_length,win_length=Config.win_size,n_fft=Config.n_fft))
         mel = linear_to_mel(stft)
         mel = normalize(amp_to_db(np.abs(mel)) - 20)
         mel = pre(np.transpose(mel, (1, 0)))
-        try_tensor_cuda(mel, cuda=cuda)
+        mel = try_tensor_cuda(mel, cuda=cuda)
         with torch.no_grad():
             wav_re = self.model(mel)
             save_wave(tensor2numpy(wav_re*2**15), out_path, sample_rate=self.rate)

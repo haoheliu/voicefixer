@@ -55,7 +55,7 @@ class VoiceFixer(nn.Module):
     def _pre(self, model, input, cuda):
         input = input[None, None, ...]
         input = torch.tensor(input)
-        try_tensor_cuda(input, cuda=cuda)
+        input = try_tensor_cuda(input, cuda=cuda)
         sp, _, _ = model.f_helper.wav_to_spectrogram_phase(input)
         mel_orig = model.mel(sp.permute(0,1,3,2)).permute(0,1,3,2)
         # return models.to_log(sp), models.to_log(mel_orig)
@@ -83,7 +83,7 @@ class VoiceFixer(nn.Module):
     @torch.no_grad()
     def restore_inmem(self, wav_10k, cuda=False, mode=0, your_vocoder_func=None):
         check_cuda_availability(cuda=cuda)
-        try_tensor_cuda(self._model,cuda=cuda)
+        self._model = try_tensor_cuda(self._model,cuda=cuda)
         if(mode == 0):
             self._model.eval()
         elif(mode == 1):

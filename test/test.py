@@ -15,6 +15,7 @@ import os
 import sys
 import librosa
 import numpy as np
+import torch
 
 git_root = git.Repo("", search_parent_directories=True).git.rev_parse("--show-toplevel")
 sys.path.append(git_root)
@@ -45,6 +46,16 @@ for mode in [0,1,2]:
                        output=os.path.join(git_root,"test/utterance/output/output_mode_"+str(mode)+".flac"), # save file path
                        cuda=False, # GPU acceleration
                        mode=mode)
+    if (mode != 2):
+        check("output_mode_" + str(mode) + ".flac")
+
+    if(torch.cuda.is_available()):
+        voicefixer.restore(input=os.path.join(git_root, "test/utterance/original/original.flac"),
+                           # low quality .wav/.flac file
+                           output=os.path.join(git_root, "test/utterance/output/output_mode_" + str(mode) + ".flac"),
+                           # save file path
+                           cuda=True,  # GPU acceleration
+                           mode=mode)
     if(mode != 2):
         check("output_mode_"+str(mode)+".flac")
     print("Pass")
@@ -60,6 +71,12 @@ vocoder.oracle(fpath=os.path.join(git_root,"test/utterance/original/p360_001_mic
                out_path=os.path.join(git_root,"test/utterance/output/oracle.flac"),
                cuda=False) # GPU acceleration
 
+check("oracle.flac")
+
+if(torch.cuda.is_available()):
+    vocoder.oracle(fpath=os.path.join(git_root, "test/utterance/original/p360_001_mic1.flac"),
+                   out_path=os.path.join(git_root, "test/utterance/output/oracle.flac"),
+                   cuda=True)  # GPU acceleration
 # Another interface
 # vocoder.forward(mel=mel)
 check("oracle.flac")
