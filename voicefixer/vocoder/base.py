@@ -56,14 +56,16 @@ class Vocoder(nn.Module):
         stft = np.abs(librosa.stft(wav,hop_length=Config.hop_length,win_length=Config.win_size,n_fft=Config.n_fft))
         mel = linear_to_mel(stft)
         mel = normalize(amp_to_db(np.abs(mel)) - 20)
-        mel = pre(np.transpose(mel, (1, 0)),cuda=cuda)
+        mel = pre(np.transpose(mel, (1, 0)))
+        try_tensor_cuda(mel, cuda=cuda)
         with torch.no_grad():
             wav_re = self.model(mel)
             save_wave(tensor2numpy(wav_re*2**15), out_path, sample_rate=self.rate)
 
-# if __name__ == '__main__':
-#     model = Vocoder(sample_rate=44100)
-#     # model.load_pretrain(Config.ckpt)
-#     model.oracle(path="/Users/liuhaohe/Desktop/test.wav",
-#             sample_rate=44100,
-#             save_dir="/Users/liuhaohe/Desktop/test_vocoder.wav")
+if __name__ == '__main__':
+    model = Vocoder(sample_rate=44100)
+    print(model.device)
+    # model.load_pretrain(Config.ckpt)
+    # model.oracle(path="/Users/liuhaohe/Desktop/test.wav",
+    #         sample_rate=44100,
+    #         save_dir="/Users/liuhaohe/Desktop/test_vocoder.wav")

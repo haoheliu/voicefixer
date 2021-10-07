@@ -63,19 +63,17 @@ def tr_pre(npy):
     zeros = torch.zeros([conditions.size()[0], Config.num_mels, pad_tail]).type_as(conditions) + -4.0
     return torch.cat([conditions, zeros], dim=-1)
 
-def pre(npy, cuda):
+def pre(npy):
     conditions = npy
     ## padding tail
     if(type(conditions) == np.ndarray):
         conditions = torch.FloatTensor(conditions).unsqueeze(0)
     else:
         conditions = torch.FloatTensor(conditions.float()).unsqueeze(0)
-    try_tensor_cuda(conditions, cuda=cuda)
     conditions = conditions.transpose(1, 2)
     l = conditions.size(-1)
     pad_tail = l % 2 + 4
     zeros = torch.zeros([1, Config.num_mels, pad_tail]) + -4.0
-    try_tensor_cuda(zeros, cuda=cuda)
     return torch.cat([conditions, zeros], dim=-1)
 
 def load_try(state, model):

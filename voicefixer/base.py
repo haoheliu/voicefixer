@@ -6,8 +6,9 @@ import os
 
 EPS=1e-8
 
-class VoiceFixer():
+class VoiceFixer(nn.Module):
     def __init__(self):
+        super(VoiceFixer, self).__init__()
         self._model = voicefixer_fe(channels=2, sample_rate=44100)
         self._model = self._model.load_from_checkpoint(os.path.join(os.path.expanduser('~'), ".cache/voicefixer/analysis_module/checkpoints/epoch=15_trimed_bn.ckpt"))
         self._model.eval()
@@ -54,8 +55,7 @@ class VoiceFixer():
     def _pre(self, model, input, cuda):
         input = input[None, None, ...]
         input = torch.tensor(input)
-        if(cuda and torch.cuda.is_available()):
-            input = input.cuda()
+        try_tensor_cuda(input, cuda=cuda)
         sp, _, _ = model.f_helper.wav_to_spectrogram_phase(input)
         mel_orig = model.mel(sp.permute(0,1,3,2)).permute(0,1,3,2)
         # return models.to_log(sp), models.to_log(mel_orig)
@@ -101,7 +101,7 @@ class VoiceFixer():
             out_model = self._model(sp, mel_noisy)
             denoised_mel = from_log(out_model['mel'])
             if(your_vocoder_func is None):
-                out = self._model.vocoder(denoised_mel)
+                out = self._model.vocoder(denoised_mel, cuda=cuda)
             else:
                 out = your_vocoder_func(denoised_mel)
             # unify energy
