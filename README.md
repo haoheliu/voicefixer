@@ -10,26 +10,25 @@
   
 # VoiceFixer
 
+*Voicefixer* aims at the restoration of human speech regardless how serious its degraded. It can handle noise, reveberation, low resolution (2kHz~44.1kHz) and clipping (0.1-1.0 threshold) effect within one model.
+
 This package provides: 
 - A pretrained 44.1k universal speaker-independent neural vocoder.
 - A pretrained *Voicefixer*, which is build based on neural vocoder.
 
-*Voicefixer* aims at the restoration of human speech regardless how serious its degraded. It can handle noise, reveberation, low resolution (2kHz~44.1kHz) and clipping (0.1-1.0 threshold) effect within one model.
-
-[![46dAq1.png](https://z3.ax1x.com/2021/09/26/46dAq1.png)](https://imgtu.com/i/46dAq1)
 
 ## Demo
 
 Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to view what voicefixer can do.
 
 ## Usage
+### Desktop App
 
-You need first install voicefixer via pip:
+First, install voicefixer via pip:
 ```shell script
 pip install voicefixer==0.0.12
 ```
 
-### Desktop App
 You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
 
 1. Clone the repo first.
@@ -49,7 +48,12 @@ streamlit run test/streamlit.py
 
 ### Python Examples 
 
-Run the following scripts for a test run:
+First, install voicefixer via pip:
+```shell script
+pip install voicefixer==0.0.12
+```
+
+Then run the following scripts for a test run:
 
 ```shell script
 git clone https://github.com/haoheliu/voicefixer.git; cd voicefixer
