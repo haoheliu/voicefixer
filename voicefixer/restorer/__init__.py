@@ -15,16 +15,15 @@ import torch
 
 meta = {
     "voicefixer_fe": {
-        "path": os.path.join(os.path.expanduser('~'), ".cache/voicefixer/analysis_module/checkpoints/epoch=15_trimed_bn.ckpt"),
-        "url": "https://zenodo.org/record/5464142/files/epoch%3D15_trimed.ckpt?download=1",
+        "path": os.path.join(os.path.expanduser('~'), ".cache/voicefixer/analysis_module/checkpoints/vf.ckpt"),
+        "url": "https://zenodo.org/record/5600188/files/vf.ckpt?download=1",
     },
 }
 
 if (not os.path.exists(meta["voicefixer_fe"]['path'])):
     os.makedirs(os.path.dirname(meta["voicefixer_fe"]['path']), exist_ok=True)
     print("Downloading the main structure of voicefixer")
-    cmd = "wget https://zenodo.org/record/5469951/files/epoch%3D15_trimed_bn.ckpt?download=1 -O " + \
-          meta["voicefixer_fe"]['path']
+    cmd = "wget "+ meta["voicefixer_fe"]['url'] + " -O " + meta["voicefixer_fe"]['path']
     os.system(cmd)
-    temp = torch.load(meta["voicefixer_fe"]['path'])
-    torch.save(temp['state_dict'], os.path.join(os.path.expanduser('~'), ".cache/voicefixer/analysis_module/checkpoints/vf.ckpt"))
+    # temp = torch.load(meta["voicefixer_fe"]['path'])
+    # torch.save(temp['state_dict'], os.path.join(os.path.expanduser('~'), ".cache/voicefixer/analysis_module/checkpoints/vf.ckpt"))
