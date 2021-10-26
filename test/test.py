@@ -42,6 +42,7 @@ voicefixer = VoiceFixer()
 # Mode 2: Train mode (might work sometimes on seriously degraded real speech)
 for mode in [0,1,2]:
     print("Test voicefixer mode",mode,end=", ")
+    print("Using CPU:")
     voicefixer.restore(input=os.path.join(git_root,"test/utterance/original/original.flac"), # low quality .wav/.flac file
                        output=os.path.join(git_root,"test/utterance/output/output_mode_"+str(mode)+".flac"), # save file path
                        cuda=False, # GPU acceleration
@@ -50,6 +51,7 @@ for mode in [0,1,2]:
         check("output_mode_" + str(mode) + ".flac")
 
     if(torch.cuda.is_available()):
+        print("Using GPU:")
         voicefixer.restore(input=os.path.join(git_root, "test/utterance/original/original.flac"),
                            # low quality .wav/.flac file
                            output=os.path.join(git_root, "test/utterance/output/output_mode_" + str(mode) + ".flac"),
@@ -67,6 +69,7 @@ vocoder = Vocoder(sample_rate=44100)
 
 ### read wave (fpath) -> mel spectrogram -> vocoder -> wave -> save wave (out_path)
 print("Test vocoder using groundtruth mel spectrogram...")
+print("Using CPU:")
 vocoder.oracle(fpath=os.path.join(git_root,"test/utterance/original/p360_001_mic1.flac"),
                out_path=os.path.join(git_root,"test/utterance/output/oracle.flac"),
                cuda=False) # GPU acceleration
@@ -74,6 +77,7 @@ vocoder.oracle(fpath=os.path.join(git_root,"test/utterance/original/p360_001_mic
 check("oracle.flac")
 
 if(torch.cuda.is_available()):
+    print("Using GPU:")
     vocoder.oracle(fpath=os.path.join(git_root, "test/utterance/original/p360_001_mic1.flac"),
                    out_path=os.path.join(git_root, "test/utterance/output/oracle.flac"),
                    cuda=True)  # GPU acceleration

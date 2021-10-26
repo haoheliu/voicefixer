@@ -31,7 +31,7 @@ URL = 'https://github.com/haoheliu/voicefixer'
 EMAIL = 'haoheliu@gmail.com'
 AUTHOR = 'Haohe Liu'
 REQUIRES_PYTHON = '>=3.7.0'
-VERSION = '0.0.13'
+VERSION = '0.0.14'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
