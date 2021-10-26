@@ -13,9 +13,10 @@
 *Voicefixer* aims at the restoration of human speech regardless how serious its degraded. It can handle noise, reveberation, low resolution (2kHz~44.1kHz) and clipping (0.1-1.0 threshold) effect within one model.
 
 This package provides: 
-- A pretrained 44.1k universal speaker-independent neural vocoder.
 - A pretrained *Voicefixer*, which is build based on neural vocoder.
+- A pretrained 44.1k universal speaker-independent neural vocoder.
 
+![main](test/figure.png)
 
 ## Demo
 
