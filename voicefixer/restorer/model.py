@@ -1,4 +1,4 @@
-import pytorch_lightning as pl
+# import pytorch_lightning as pl
 
 import torch.utils
 from torchaudio.transforms import MelScale
@@ -90,7 +90,7 @@ class Generator(nn.Module):
         # todo mel and addition here are in log scales
         return {'mel': mel, "lstm_out":unet_out, "unet_out":unet_out, "noisy": noisy, "clean": clean}
 
-class VoiceFixer(pl.LightningModule):
+class VoiceFixer(nn.Module):
     def __init__(self, channels, type_target="vocals", nsrc=1, loss="l1",
                  lr=0.002, gamma=0.9,
                  batchsize=None, frame_length=None,
@@ -121,7 +121,7 @@ class VoiceFixer(pl.LightningModule):
         window = 'hann'
         freeze_parameters = True
 
-        self.save_hyperparameters()
+        # self.save_hyperparameters()
         self.nsrc = nsrc
         self.type_target = type_target
         self.channels = channels
