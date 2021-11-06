@@ -31,14 +31,13 @@ URL = 'https://github.com/haoheliu/voicefixer'
 EMAIL = 'haoheliu@gmail.com'
 AUTHOR = 'Haohe Liu'
 REQUIRES_PYTHON = '>=3.7.0'
-VERSION = '0.0.16'
+VERSION = '0.0.17'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
     "librosa>=0.8.1",
     "matplotlib",
     "torch>=1.7.0",
-    "torchaudio",
     "progressbar",
     "torchlibrosa==0.0.7",
     "GitPython",

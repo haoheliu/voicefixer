@@ -1,7 +1,7 @@
 # import pytorch_lightning as pl
 
 import torch.utils
-from torchaudio.transforms import MelScale
+from voicefixer.tools.mel_scale import MelScale
 import torch.utils.data
 import matplotlib.pyplot as plt
 import librosa.display
