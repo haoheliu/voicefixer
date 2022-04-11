@@ -5,6 +5,7 @@ import math
 
 import warnings
 
+
 class MelScale(torch.nn.Module):
     r"""Turn a normal STFT into a mel frequency STFT, using a conversion
     matrix.  This uses triangular filter banks.
@@ -25,16 +26,18 @@ class MelScale(torch.nn.Module):
         :py:func:`torchaudio.functional.melscale_fbanks` - The function used to
         generate the filter banks.
     """
-    __constants__ = ['n_mels', 'sample_rate', 'f_min', 'f_max']
+    __constants__ = ["n_mels", "sample_rate", "f_min", "f_max"]
 
-    def __init__(self,
-                 n_mels: int = 128,
-                 sample_rate: int = 16000,
-                 f_min: float = 0.,
-                 f_max: Optional[float] = None,
-                 n_stft: int = 201,
-                 norm: Optional[str] = None,
-                 mel_scale: str = "htk") -> None:
+    def __init__(
+        self,
+        n_mels: int = 128,
+        sample_rate: int = 16000,
+        f_min: float = 0.0,
+        f_max: Optional[float] = None,
+        n_stft: int = 201,
+        norm: Optional[str] = None,
+        mel_scale: str = "htk",
+    ) -> None:
         super(MelScale, self).__init__()
         self.n_mels = n_mels
         self.sample_rate = sample_rate
@@ -43,11 +46,19 @@ class MelScale(torch.nn.Module):
         self.norm = norm
         self.mel_scale = mel_scale
 
-        assert f_min <= self.f_max, 'Require f_min: {} < f_max: {}'.format(f_min, self.f_max)
+        assert f_min <= self.f_max, "Require f_min: {} < f_max: {}".format(
+            f_min, self.f_max
+        )
         fb = melscale_fbanks(
-            n_stft, self.f_min, self.f_max, self.n_mels, self.sample_rate, self.norm,
-            self.mel_scale)
-        self.register_buffer('fb', fb)
+            n_stft,
+            self.f_min,
+            self.f_max,
+            self.n_mels,
+            self.sample_rate,
+            self.norm,
+            self.mel_scale,
+        )
+        self.register_buffer("fb", fb)
 
     def forward(self, specgram: Tensor) -> Tensor:
         r"""
@@ -59,9 +70,12 @@ class MelScale(torch.nn.Module):
         """
 
         # (..., time, freq) dot (freq, n_mels) -> (..., n_mels, time)
-        mel_specgram = torch.matmul(specgram.transpose(-1, -2), self.fb).transpose(-1, -2)
+        mel_specgram = torch.matmul(specgram.transpose(-1, -2), self.fb).transpose(
+            -1, -2
+        )
 
         return mel_specgram
+
 
 def _hz_to_mel(freq: float, mel_scale: str = "htk") -> float:
     r"""Convert Hz to Mels.
@@ -74,7 +88,7 @@ def _hz_to_mel(freq: float, mel_scale: str = "htk") -> float:
         mels (float): Frequency in Mels
     """
 
-    if mel_scale not in ['slaney', 'htk']:
+    if mel_scale not in ["slaney", "htk"]:
         raise ValueError('mel_scale should be one of "htk" or "slaney".')
 
     if mel_scale == "htk":
@@ -96,6 +110,7 @@ def _hz_to_mel(freq: float, mel_scale: str = "htk") -> float:
 
     return mels
 
+
 def _mel_to_hz(mels: Tensor, mel_scale: str = "htk") -> Tensor:
     """Convert mel bin numbers to frequencies.
 
@@ -107,11 +122,11 @@ def _mel_to_hz(mels: Tensor, mel_scale: str = "htk") -> Tensor:
         freqs (Tensor): Mels converted in Hz
     """
 
-    if mel_scale not in ['slaney', 'htk']:
+    if mel_scale not in ["slaney", "htk"]:
         raise ValueError('mel_scale should be one of "htk" or "slaney".')
 
     if mel_scale == "htk":
-        return 700.0 * (10.0**(mels / 2595.0) - 1.0)
+        return 700.0 * (10.0 ** (mels / 2595.0) - 1.0)
 
     # Fill in the linear scale
     f_min = 0.0
@@ -123,14 +138,15 @@ def _mel_to_hz(mels: Tensor, mel_scale: str = "htk") -> Tensor:
     min_log_mel = (min_log_hz - f_min) / f_sp
     logstep = math.log(6.4) / 27.0
 
-    log_t = (mels >= min_log_mel)
+    log_t = mels >= min_log_mel
     freqs[log_t] = min_log_hz * torch.exp(logstep * (mels[log_t] - min_log_mel))
 
     return freqs
 
+
 def _create_triangular_filterbank(
-        all_freqs: Tensor,
-        f_pts: Tensor,
+    all_freqs: Tensor,
+    f_pts: Tensor,
 ) -> Tensor:
     """Create a triangular filter bank.
 
@@ -153,14 +169,15 @@ def _create_triangular_filterbank(
 
     return fb
 
+
 def melscale_fbanks(
-        n_freqs: int,
-        f_min: float,
-        f_max: float,
-        n_mels: int,
-        sample_rate: int,
-        norm: Optional[str] = None,
-        mel_scale: str = "htk",
+    n_freqs: int,
+    f_min: float,
+    f_max: float,
+    n_mels: int,
+    sample_rate: int,
+    norm: Optional[str] = None,
+    mel_scale: str = "htk",
 ) -> Tensor:
     r"""Create a frequency bin conversion matrix.
 
@@ -208,10 +225,10 @@ def melscale_fbanks(
 
     if norm is not None and norm == "slaney":
         # Slaney-style mel is scaled to be approx constant energy per channel
-        enorm = 2.0 / (f_pts[2:n_mels + 2] - f_pts[:n_mels])
+        enorm = 2.0 / (f_pts[2 : n_mels + 2] - f_pts[:n_mels])
         fb *= enorm.unsqueeze(0)
 
-    if (fb.max(dim=0).values == 0.).any():
+    if (fb.max(dim=0).values == 0.0).any():
         warnings.warn(
             "At least one mel filterbank has all zero values. "
             f"The value for `n_mels` ({n_mels}) may be set too high. "

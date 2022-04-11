@@ -18,30 +18,33 @@ def init_voicefixer():
 voice_fixer = init_voicefixer()
 
 
-sample_rate = 44100  
+sample_rate = 44100
 
 
-st.write('Wav player')
+st.write("Wav player")
 
 
-w = st.file_uploader('Upload a wav file', type='wav')
+w = st.file_uploader("Upload a wav file", type="wav")
 
 
 if w:
-    st.write('Inference : ')
-    
+    st.write("Inference : ")
+
     # choose options
-    mode = st.radio('Voice fixer modes (0: original mode, 1: Add preprocessing module 2: Train mode (may work sometimes on seriously degraded speech))', [0, 1, 2])
+    mode = st.radio(
+        "Voice fixer modes (0: original mode, 1: Add preprocessing module 2: Train mode (may work sometimes on seriously degraded speech))",
+        [0, 1, 2],
+    )
     if torch.cuda.is_available():
-        is_cuda = st.radio('Turn on GPU', [True, False])
+        is_cuda = st.radio("Turn on GPU", [True, False])
         if is_cuda != list(voice_fixer._model.parameters())[0].is_cuda:
-            device = 'cuda' if is_cuda else 'cpu'
+            device = "cuda" if is_cuda else "cpu"
             voice_fixer._model = voice_fixer._model.to(device)
     else:
-        is_cuda=False
+        is_cuda = False
 
     t1 = time.time()
-    
+
     # Load audio from binary
     audio, _ = librosa.load(w, sr=sample_rate, mono=True)
 
@@ -50,17 +53,16 @@ if w:
 
     pred_time = time.time() - t1
 
-
     # original audio
-    st.write('Original Audio : ')
-    
+    st.write("Original Audio : ")
+
     st.audio(w)
 
     # predicted audio
-    st.write('Predicted Audio : ')
+    st.write("Predicted Audio : ")
 
     # make buffer
     with BytesIO() as buffer:
-        soundfile.write(buffer, pred_wav.T, samplerate=sample_rate, format='WAV')
+        soundfile.write(buffer, pred_wav.T, samplerate=sample_rate, format="WAV")
         st.write("Time: {:.3f}s".format(pred_time))
-        st.audio(buffer.getvalue(), format='audio/wav')
+        st.audio(buffer.getvalue(), format="audio/wav")

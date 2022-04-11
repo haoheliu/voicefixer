@@ -1,10 +1,12 @@
 import os
 
-def find_and_build(root,path):
+
+def find_and_build(root, path):
     path = os.path.join(root, path)
     if not os.path.exists(path):
-        os.makedirs(path,exist_ok=True)
+        os.makedirs(path, exist_ok=True)
     return path
+
 
 def root_path(repo_name="voicefixer"):
     path = os.path.abspath(__file__)

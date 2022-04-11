@@ -7,7 +7,7 @@ from voicefixer.vocoder.config import Config
 
 # From xin wang of nii
 class SineGen(torch.nn.Module):
-    """ Definition of sine generator
+    """Definition of sine generator
     SineGen(samp_rate, harmonic_num = 0,
             sine_amp = 0.1, noise_std = 0.003,
             voiced_threshold = 0,
@@ -24,10 +24,15 @@ class SineGen(torch.nn.Module):
         segment is always sin(np.pi) or cos(0)
     """
 
-    def __init__(self, samp_rate=24000, harmonic_num=0,
-                 sine_amp=0.1, noise_std=0.003,
-                 voiced_threshold=0,
-                 flag_for_pulse=False):
+    def __init__(
+        self,
+        samp_rate=24000,
+        harmonic_num=0,
+        sine_amp=0.1,
+        noise_std=0.003,
+        voiced_threshold=0,
+        flag_for_pulse=False,
+    ):
         super(SineGen, self).__init__()
         self.sine_amp = sine_amp
         self.noise_std = noise_std
@@ -44,16 +49,17 @@ class SineGen(torch.nn.Module):
         return uv
 
     def _f02sine(self, f0_values):
-        """ f0_values: (batchsize, length, dim)
-            where dim indicates fundamental tone and overtones
+        """f0_values: (batchsize, length, dim)
+        where dim indicates fundamental tone and overtones
         """
         # convert to F0 in rad. The interger part n can be ignored
         # because 2 * np.pi * n doesn't affect phase
         rad_values = (f0_values / self.sampling_rate) % 1
 
         # initial phase noise (no noise for fundamental component)
-        rand_ini = torch.rand(f0_values.shape[0], f0_values.shape[2], \
-                              device=f0_values.device)
+        rand_ini = torch.rand(
+            f0_values.shape[0], f0_values.shape[2], device=f0_values.device
+        )
         rand_ini[:, 0] = 0
         rad_values[:, 0, :] = rad_values[:, 0, :] + rand_ini
 
@@ -66,13 +72,13 @@ class SineGen(torch.nn.Module):
             # Buffer tmp_over_one_idx indicates the time step to add -1.
             # This will not change F0 of sine because (x-1) * 2*pi = x *2*pi
             tmp_over_one = torch.cumsum(rad_values, 1) % 1
-            tmp_over_one_idx = (tmp_over_one[:, 1:, :] -
-                                tmp_over_one[:, :-1, :]) < 0
+            tmp_over_one_idx = (tmp_over_one[:, 1:, :] - tmp_over_one[:, :-1, :]) < 0
             cumsum_shift = torch.zeros_like(rad_values)
             cumsum_shift[:, 1:, :] = tmp_over_one_idx * -1.0
 
-            sines = torch.sin(torch.cumsum(rad_values + cumsum_shift, dim=1) \
-                              * 2 * np.pi)
+            sines = torch.sin(
+                torch.cumsum(rad_values + cumsum_shift, dim=1) * 2 * np.pi
+            )
         else:
             # If necessary, make sure that the first time step of every
             # voiced segments is sin(pi) or cos(0)
@@ -104,7 +110,7 @@ class SineGen(torch.nn.Module):
         return sines
 
     def forward(self, f0):
-        """ sine_tensor, uv = forward(f0)
+        """sine_tensor, uv = forward(f0)
         input F0: tensor(batchsize=1, length, dim=1)
                   f0 for unvoiced steps should be 0
         output sine_tensor: tensor(batchsize=1, length, dim)
@@ -112,8 +118,7 @@ class SineGen(torch.nn.Module):
         """
 
         with torch.no_grad():
-            f0_buf = torch.zeros(f0.shape[0], f0.shape[1], self.dim, \
-                                 device=f0.device)
+            f0_buf = torch.zeros(f0.shape[0], f0.shape[1], self.dim, device=f0.device)
             # fundamental component
             f0_buf[:, :, 0] = f0[:, :, 0]
             for idx in np.arange(self.harmonic_num):
@@ -141,35 +146,42 @@ class SineGen(torch.nn.Module):
 
 
 class LowpassBlur(nn.Module):
-    ''' perform low pass filter after upsampling for anti-aliasing'''
+    """perform low pass filter after upsampling for anti-aliasing"""
 
-    def __init__(self, channels=128, filt_size=3, pad_type='reflect', pad_off=0):
+    def __init__(self, channels=128, filt_size=3, pad_type="reflect", pad_off=0):
         super(LowpassBlur, self).__init__()
         self.filt_size = filt_size
         self.pad_off = pad_off
-        self.pad_sizes = [int(1. * (filt_size - 1) / 2), int(np.ceil(1. * (filt_size - 1) / 2))]
+        self.pad_sizes = [
+            int(1.0 * (filt_size - 1) / 2),
+            int(np.ceil(1.0 * (filt_size - 1) / 2)),
+        ]
         self.pad_sizes = [pad_size + pad_off for pad_size in self.pad_sizes]
         self.off = 0
         self.channels = channels
 
-        if (self.filt_size == 1):
-            a = np.array([1., ])
-        elif (self.filt_size == 2):
-            a = np.array([1., 1.])
-        elif (self.filt_size == 3):
-            a = np.array([1., 2., 1.])
-        elif (self.filt_size == 4):
-            a = np.array([1., 3., 3., 1.])
-        elif (self.filt_size == 5):
-            a = np.array([1., 4., 6., 4., 1.])
-        elif (self.filt_size == 6):
-            a = np.array([1., 5., 10., 10., 5., 1.])
-        elif (self.filt_size == 7):
-            a = np.array([1., 6., 15., 20., 15., 6., 1.])
+        if self.filt_size == 1:
+            a = np.array(
+                [
+                    1.0,
+                ]
+            )
+        elif self.filt_size == 2:
+            a = np.array([1.0, 1.0])
+        elif self.filt_size == 3:
+            a = np.array([1.0, 2.0, 1.0])
+        elif self.filt_size == 4:
+            a = np.array([1.0, 3.0, 3.0, 1.0])
+        elif self.filt_size == 5:
+            a = np.array([1.0, 4.0, 6.0, 4.0, 1.0])
+        elif self.filt_size == 6:
+            a = np.array([1.0, 5.0, 10.0, 10.0, 5.0, 1.0])
+        elif self.filt_size == 7:
+            a = np.array([1.0, 6.0, 15.0, 20.0, 15.0, 6.0, 1.0])
 
         filt = torch.Tensor(a)
         filt = filt / torch.sum(filt)
-        self.register_buffer('filt', filt[None, None, :].repeat((self.channels, 1, 1)))
+        self.register_buffer("filt", filt[None, None, :].repeat((self.channels, 1, 1)))
 
         self.pad = get_pad_layer_1d(pad_type)(self.pad_sizes)
 
@@ -180,22 +192,27 @@ class LowpassBlur(nn.Module):
 
 
 def get_pad_layer_1d(pad_type):
-    if (pad_type in ['refl', 'reflect']):
+    if pad_type in ["refl", "reflect"]:
         PadLayer = nn.ReflectionPad1d
-    elif (pad_type in ['repl', 'replicate']):
+    elif pad_type in ["repl", "replicate"]:
         PadLayer = nn.ReplicationPad1d
-    elif (pad_type == 'zero'):
+    elif pad_type == "zero":
         PadLayer = nn.ZeroPad1d
     else:
-        print('Pad type [%s] not recognized' % pad_type)
+        print("Pad type [%s] not recognized" % pad_type)
     return PadLayer
 
 
 class MovingAverageSmooth(torch.nn.Conv1d):
     def __init__(self, channels, window_len=3):
         """Initialize Conv1d module."""
-        super(MovingAverageSmooth, self).__init__(in_channels=channels, out_channels=channels, kernel_size=1,
-                                                  groups=channels, bias=False)
+        super(MovingAverageSmooth, self).__init__(
+            in_channels=channels,
+            out_channels=channels,
+            kernel_size=1,
+            groups=channels,
+            bias=False,
+        )
 
         torch.nn.init.constant_(self.weight, 1.0 / window_len)
         for p in self.parameters():
@@ -242,7 +259,8 @@ class Stretch2d(torch.nn.Module):
             Tensor: Interpolated tensor (B, C, F * y_scale, T * x_scale),
         """
         return F.interpolate(
-            x, scale_factor=(self.y_scale, self.x_scale), mode=self.mode)
+            x, scale_factor=(self.y_scale, self.x_scale), mode=self.mode
+        )
 
 
 class Conv2d(torch.nn.Conv2d):
@@ -254,7 +272,7 @@ class Conv2d(torch.nn.Conv2d):
 
     def reset_parameters(self):
         """Reset parameters."""
-        self.weight.data.fill_(1. / np.prod(self.kernel_size))
+        self.weight.data.fill_(1.0 / np.prod(self.kernel_size))
         if self.bias is not None:
             torch.nn.init.constant_(self.bias, 0.0)
 
@@ -262,14 +280,15 @@ class Conv2d(torch.nn.Conv2d):
 class UpsampleNetwork(torch.nn.Module):
     """Upsampling network module."""
 
-    def __init__(self,
-                 upsample_scales,
-                 nonlinear_activation=None,
-                 nonlinear_activation_params={},
-                 interpolate_mode="nearest",
-                 freq_axis_kernel_size=1,
-                 use_causal_conv=False,
-                 ):
+    def __init__(
+        self,
+        upsample_scales,
+        nonlinear_activation=None,
+        nonlinear_activation_params={},
+        interpolate_mode="nearest",
+        freq_axis_kernel_size=1,
+        use_causal_conv=False,
+    ):
         """Initialize upsampling network module.
         Args:
             upsample_scales (list): List of upsampling scales.
@@ -287,7 +306,9 @@ class UpsampleNetwork(torch.nn.Module):
             self.up_layers += [stretch]
 
             # conv layer
-            assert (freq_axis_kernel_size - 1) % 2 == 0, "Not support even number freq axis kernel size."
+            assert (
+                freq_axis_kernel_size - 1
+            ) % 2 == 0, "Not support even number freq axis kernel size."
             freq_axis_padding = (freq_axis_kernel_size - 1) // 2
             kernel_size = (freq_axis_kernel_size, scale * 2 + 1)
             if use_causal_conv:
@@ -299,7 +320,9 @@ class UpsampleNetwork(torch.nn.Module):
 
             # nonlinear
             if nonlinear_activation is not None:
-                nonlinear = getattr(torch.nn, nonlinear_activation)(**nonlinear_activation_params)
+                nonlinear = getattr(torch.nn, nonlinear_activation)(
+                    **nonlinear_activation_params
+                )
                 self.up_layers += [nonlinear]
 
     def forward(self, c):
@@ -312,7 +335,7 @@ class UpsampleNetwork(torch.nn.Module):
         c = c.unsqueeze(1)  # (B, 1, C, T)
         for f in self.up_layers:
             if self.use_causal_conv and isinstance(f, Conv2d):
-                c = f(c)[..., :c.size(-1)]
+                c = f(c)[..., : c.size(-1)]
             else:
                 c = f(c)
         return c.squeeze(1)  # (B, C, T')
@@ -321,16 +344,17 @@ class UpsampleNetwork(torch.nn.Module):
 class ConvInUpsampleNetwork(torch.nn.Module):
     """Convolution + upsampling network module."""
 
-    def __init__(self,
-                 upsample_scales=[3, 4, 5, 5],
-                 nonlinear_activation="ReLU",
-                 nonlinear_activation_params={},
-                 interpolate_mode="nearest",
-                 freq_axis_kernel_size=1,
-                 aux_channels=80,
-                 aux_context_window=0,
-                 use_causal_conv=False
-                 ):
+    def __init__(
+        self,
+        upsample_scales=[3, 4, 5, 5],
+        nonlinear_activation="ReLU",
+        nonlinear_activation_params={},
+        interpolate_mode="nearest",
+        freq_axis_kernel_size=1,
+        aux_channels=80,
+        aux_context_window=0,
+        use_causal_conv=False,
+    ):
         """Initialize convolution + upsampling network module.
         Args:
             upsample_scales (list): List of upsampling scales.
@@ -346,9 +370,13 @@ class ConvInUpsampleNetwork(torch.nn.Module):
         self.aux_context_window = aux_context_window
         self.use_causal_conv = use_causal_conv and aux_context_window > 0
         # To capture wide-context information in conditional features
-        kernel_size = aux_context_window + 1 if use_causal_conv else 2 * aux_context_window + 1
+        kernel_size = (
+            aux_context_window + 1 if use_causal_conv else 2 * aux_context_window + 1
+        )
         # NOTE(kan-bayashi): Here do not use padding because the input is already padded
-        self.conv_in = Conv1d(aux_channels, aux_channels, kernel_size=kernel_size, bias=False)
+        self.conv_in = Conv1d(
+            aux_channels, aux_channels, kernel_size=kernel_size, bias=False
+        )
         self.upsample = UpsampleNetwork(
             upsample_scales=upsample_scales,
             nonlinear_activation=nonlinear_activation,
@@ -369,34 +397,31 @@ class ConvInUpsampleNetwork(torch.nn.Module):
             The length of inputs considers the context window size.
         """
         c_ = self.conv_in(c)
-        c = c_[:, :, :-self.aux_context_window] if self.use_causal_conv else c_
+        c = c_[:, :, : -self.aux_context_window] if self.use_causal_conv else c_
         return self.upsample(c)
 
 
 class DownsampleNet(nn.Module):
-    def __init__(self,
-                 input_size,
-                 output_size,
-                 upsample_factor,
-                 hp=None,
-                 index=0):
+    def __init__(self, input_size, output_size, upsample_factor, hp=None, index=0):
         super(DownsampleNet, self).__init__()
         self.input_size = input_size
         self.output_size = output_size
         self.upsample_factor = upsample_factor
         self.skip_conv = nn.Conv1d(input_size, output_size, kernel_size=1)
         self.index = index
-        layer = nn.Conv1d(input_size,
-                          output_size,
-                          kernel_size=upsample_factor * 2,
-                          stride=upsample_factor,
-                          padding=upsample_factor // 2 + upsample_factor % 2)
+        layer = nn.Conv1d(
+            input_size,
+            output_size,
+            kernel_size=upsample_factor * 2,
+            stride=upsample_factor,
+            padding=upsample_factor // 2 + upsample_factor % 2,
+        )
 
         self.layer = nn.utils.weight_norm(layer)
 
     def forward(self, inputs):
         B, C, T = inputs.size()
-        res = inputs[:, :, ::self.upsample_factor]
+        res = inputs[:, :, :: self.upsample_factor]
         skip = self.skip_conv(res)
 
         outputs = self.layer(inputs)
@@ -406,12 +431,7 @@ class DownsampleNet(nn.Module):
 
 
 class UpsampleNet(nn.Module):
-    def __init__(self,
-                 input_size,
-                 output_size,
-                 upsample_factor,
-                 hp=None,
-                 index=0):
+    def __init__(self, input_size, output_size, upsample_factor, hp=None, index=0):
 
         super(UpsampleNet, self).__init__()
         self.up_type = Config.up_type
@@ -428,23 +448,39 @@ class UpsampleNet(nn.Module):
 
         if self.up_type != "pn" or self.index < 3:
             # if self.up_type != "pn":
-            layer = nn.ConvTranspose1d(input_size, output_size, upsample_factor * 2,
-                                       upsample_factor,
-                                       padding=upsample_factor // 2 + upsample_factor % 2,
-                                       output_padding=upsample_factor % 2)
+            layer = nn.ConvTranspose1d(
+                input_size,
+                output_size,
+                upsample_factor * 2,
+                upsample_factor,
+                padding=upsample_factor // 2 + upsample_factor % 2,
+                output_padding=upsample_factor % 2,
+            )
             self.layer = nn.utils.weight_norm(layer)
         else:
             self.layer = nn.Sequential(
                 nn.ReflectionPad1d(1),
-                nn.utils.weight_norm(nn.Conv1d(input_size, output_size * upsample_factor, kernel_size=3)),
+                nn.utils.weight_norm(
+                    nn.Conv1d(input_size, output_size * upsample_factor, kernel_size=3)
+                ),
                 nn.LeakyReLU(),
                 nn.ReflectionPad1d(1),
                 nn.utils.weight_norm(
-                    nn.Conv1d(output_size * upsample_factor, output_size * upsample_factor, kernel_size=3)),
+                    nn.Conv1d(
+                        output_size * upsample_factor,
+                        output_size * upsample_factor,
+                        kernel_size=3,
+                    )
+                ),
                 nn.LeakyReLU(),
                 nn.ReflectionPad1d(1),
                 nn.utils.weight_norm(
-                    nn.Conv1d(output_size * upsample_factor, output_size * upsample_factor, kernel_size=3)),
+                    nn.Conv1d(
+                        output_size * upsample_factor,
+                        output_size * upsample_factor,
+                        kernel_size=3,
+                    )
+                ),
                 nn.LeakyReLU(),
             )
 
@@ -505,22 +541,39 @@ class ResStack(nn.Module):
 
         if self.use_shift_scale:
             self.scale_conv = nn.utils.weight_norm(
-                nn.Conv1d(channel, 2 * channel, kernel_size=kernel_size, dilation=1, padding=1))
+                nn.Conv1d(
+                    channel, 2 * channel, kernel_size=kernel_size, dilation=1, padding=1
+                )
+            )
 
         if not self.use_wn:
-            self.layers = nn.ModuleList([
-                nn.Sequential(
-                    nn.LeakyReLU(),
-                    nn.utils.weight_norm(nn.Conv1d(channel, channel,
-                                                   kernel_size=kernel_size, dilation=3 ** (i % 10),
-                                                   padding=get_padding(kernel_size, 3 ** (i % 10)))),
-                    nn.LeakyReLU(),
-                    nn.utils.weight_norm(nn.Conv1d(channel, channel,
-                                                   kernel_size=kernel_size, dilation=1,
-                                                   padding=get_padding(kernel_size, 1))),
-                )
-                for i in range(resstack_depth)
-            ])
+            self.layers = nn.ModuleList(
+                [
+                    nn.Sequential(
+                        nn.LeakyReLU(),
+                        nn.utils.weight_norm(
+                            nn.Conv1d(
+                                channel,
+                                channel,
+                                kernel_size=kernel_size,
+                                dilation=3 ** (i % 10),
+                                padding=get_padding(kernel_size, 3 ** (i % 10)),
+                            )
+                        ),
+                        nn.LeakyReLU(),
+                        nn.utils.weight_norm(
+                            nn.Conv1d(
+                                channel,
+                                channel,
+                                kernel_size=kernel_size,
+                                dilation=1,
+                                padding=get_padding(kernel_size, 1),
+                            )
+                        ),
+                    )
+                    for i in range(resstack_depth)
+                ]
+            )
         else:
             self.wn = WaveNet(
                 in_channels=channel,
@@ -551,26 +604,27 @@ class ResStack(nn.Module):
             s = F.softplus(s)
 
             x = m + s * x[:, :, 1:]  # key!!!
-            x = F.pad(x, pad=(1, 0), mode='constant', value=0)
+            x = F.pad(x, pad=(1, 0), mode="constant", value=0)
 
         return x
 
 
 class WaveNet(nn.Module):
-    def __init__(self,
-                 in_channels=1,
-                 out_channels=1,
-                 num_layers=10,
-                 residual_channels=64,
-                 gate_channels=64,
-                 skip_channels=64,
-                 kernel_size=3,
-                 dilation_rate=2,
-                 cin_channels=80,
-                 hp=None,
-                 causal=False,
-                 use_downup=False,
-                 ):
+    def __init__(
+        self,
+        in_channels=1,
+        out_channels=1,
+        num_layers=10,
+        residual_channels=64,
+        gate_channels=64,
+        skip_channels=64,
+        kernel_size=3,
+        dilation_rate=2,
+        cin_channels=80,
+        hp=None,
+        causal=False,
+        use_downup=False,
+    ):
         super(WaveNet, self).__init__()
 
         self.in_channels = in_channels
@@ -585,31 +639,50 @@ class WaveNet(nn.Module):
         self.use_downup = use_downup
 
         self.front_conv = nn.Sequential(
-            nn.Conv1d(in_channels=self.in_channels, out_channels=self.residual_channels, kernel_size=3, padding=1),
-            nn.ReLU()
+            nn.Conv1d(
+                in_channels=self.in_channels,
+                out_channels=self.residual_channels,
+                kernel_size=3,
+                padding=1,
+            ),
+            nn.ReLU(),
         )
         if self.use_downup:
             self.downup_conv = nn.Sequential(
-                nn.Conv1d(in_channels=self.residual_channels, out_channels=self.residual_channels, kernel_size=3,
-                          stride=2, padding=1),
+                nn.Conv1d(
+                    in_channels=self.residual_channels,
+                    out_channels=self.residual_channels,
+                    kernel_size=3,
+                    stride=2,
+                    padding=1,
+                ),
                 nn.ReLU(),
-                nn.Conv1d(in_channels=self.residual_channels, out_channels=self.residual_channels, kernel_size=3,
-                          stride=2, padding=1),
+                nn.Conv1d(
+                    in_channels=self.residual_channels,
+                    out_channels=self.residual_channels,
+                    kernel_size=3,
+                    stride=2,
+                    padding=1,
+                ),
                 nn.ReLU(),
                 UpsampleNet(self.residual_channels, self.residual_channels, 4, hp),
             )
 
         self.res_blocks = nn.ModuleList()
         for n in range(self.num_layers):
-            self.res_blocks.append(ResBlock(self.residual_channels,
-                                            self.gate_channels,
-                                            self.skip_channels,
-                                            self.kernel_size,
-                                            dilation=dilation_rate ** n,
-                                            cin_channels=self.cin_channels,
-                                            local_conditioning=(self.cin_channels > 0),
-                                            causal=self.causal,
-                                            mode='SAME'))
+            self.res_blocks.append(
+                ResBlock(
+                    self.residual_channels,
+                    self.gate_channels,
+                    self.skip_channels,
+                    self.kernel_size,
+                    dilation=dilation_rate**n,
+                    cin_channels=self.cin_channels,
+                    local_conditioning=(self.cin_channels > 0),
+                    causal=self.causal,
+                    mode="SAME",
+                )
+            )
         self.final_conv = nn.Sequential(
             nn.ReLU(),
             Conv(self.skip_channels, self.skip_channels, 1, causal=self.causal),
@@ -635,7 +708,11 @@ class WaveNet(nn.Module):
     def receptive_field_size(self):
         num_dir = 1 if self.causal else 2
         dilations = [2 ** (i % self.num_layers) for i in range(self.num_layers)]
-        return num_dir * (self.kernel_size - 1) * sum(dilations) + 1 + (self.front_channels - 1)
+        return (
+            num_dir * (self.kernel_size - 1) * sum(dilations)
+            + 1
+            + (self.front_channels - 1)
+        )
 
     def remove_weight_norm(self):
         for f in self.res_blocks:
@@ -643,25 +720,39 @@ class WaveNet(nn.Module):
 
 
 class Conv(nn.Module):
-    def __init__(self, in_channels, out_channels, kernel_size, dilation=1, causal=False, mode='SAME'):
+    def __init__(
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        dilation=1,
+        causal=False,
+        mode="SAME",
+    ):
         super(Conv, self).__init__()
 
         self.causal = causal
         self.mode = mode
-        if self.causal and self.mode == 'SAME':
+        if self.causal and self.mode == "SAME":
             self.padding = dilation * (kernel_size - 1)
-        elif self.mode == 'SAME':
+        elif self.mode == "SAME":
             self.padding = dilation * (kernel_size - 1) // 2
         else:
             self.padding = 0
-        self.conv = nn.Conv1d(in_channels, out_channels, kernel_size, dilation=dilation, padding=self.padding)
+        self.conv = nn.Conv1d(
+            in_channels,
+            out_channels,
+            kernel_size,
+            dilation=dilation,
+            padding=self.padding,
+        )
         self.conv = nn.utils.weight_norm(self.conv)
         nn.init.kaiming_normal_(self.conv.weight)
 
     def forward(self, tensor):
         out = self.conv(tensor)
         if self.causal and self.padding is not 0:
-            out = out[:, :, :-self.padding]
+            out = out[:, :, : -self.padding]
         return out
 
     def remove_weight_norm(self):
@@ -669,16 +760,30 @@ class Conv(nn.Module):
 
 
 class ResBlock(nn.Module):
-    def __init__(self, in_channels, out_channels, skip_channels, kernel_size, dilation,
-                 cin_channels=None, local_conditioning=True, causal=False, mode='SAME'):
+    def __init__(
+        self,
+        in_channels,
+        out_channels,
+        skip_channels,
+        kernel_size,
+        dilation,
+        cin_channels=None,
+        local_conditioning=True,
+        causal=False,
+        mode="SAME",
+    ):
         super(ResBlock, self).__init__()
         self.causal = causal
         self.local_conditioning = local_conditioning
         self.cin_channels = cin_channels
         self.mode = mode
 
-        self.filter_conv = Conv(in_channels, out_channels, kernel_size, dilation, causal, mode)
-        self.gate_conv = Conv(in_channels, out_channels, kernel_size, dilation, causal, mode)
+        self.filter_conv = Conv(
+            in_channels, out_channels, kernel_size, dilation, causal, mode
+        )
+        self.gate_conv = Conv(
+            in_channels, out_channels, kernel_size, dilation, causal, mode
+        )
         self.res_conv = nn.Conv1d(out_channels, in_channels, kernel_size=1)
         self.skip_conv = nn.Conv1d(out_channels, skip_channels, kernel_size=1)
         self.res_conv = nn.utils.weight_norm(self.res_conv)
@@ -702,7 +807,7 @@ class ResBlock(nn.Module):
 
         res = self.res_conv(out)
         skip = self.skip_conv(out)
-        if self.mode == 'SAME':
+        if self.mode == "SAME":
             return (tensor + res) * math.sqrt(0.5), skip
         else:
             return (tensor[:, :, 1:] + res) * math.sqrt(0.5), skip
@@ -745,19 +850,35 @@ class ResStack2D(nn.Module):
         def get_padding(kernel_size, dilation=1):
             return int((kernel_size * dilation - dilation) / 2)
 
-        self.layers = nn.ModuleList([
-            nn.Sequential(
-                nn.LeakyReLU(),
-                nn.utils.weight_norm(nn.Conv2d(1, self.channels, kernel_size,
-                                               dilation=(1, 3 ** (i)),
-                                               padding=(1, get_padding(kernel_size, 3 ** (i))))),
-                nn.LeakyReLU(),
-                nn.utils.weight_norm(nn.Conv2d(self.channels, self.channels, kernel_size,
-                                               dilation=(1, 3 ** (i)),
-                                               padding=(1, get_padding(kernel_size, 3 ** (i))))),
-                nn.LeakyReLU(),
-                nn.utils.weight_norm(nn.Conv2d(self.channels, 1, kernel_size=1)))
-            for i in range(resstack_depth)])
+        self.layers = nn.ModuleList(
+            [
+                nn.Sequential(
+                    nn.LeakyReLU(),
+                    nn.utils.weight_norm(
+                        nn.Conv2d(
+                            1,
+                            self.channels,
+                            kernel_size,
+                            dilation=(1, 3 ** (i)),
+                            padding=(1, get_padding(kernel_size, 3 ** (i))),
+                        )
+                    ),
+                    nn.LeakyReLU(),
+                    nn.utils.weight_norm(
+                        nn.Conv2d(
+                            self.channels,
+                            self.channels,
+                            kernel_size,
+                            dilation=(1, 3 ** (i)),
+                            padding=(1, get_padding(kernel_size, 3 ** (i))),
+                        )
+                    ),
+                    nn.LeakyReLU(),
+                    nn.utils.weight_norm(nn.Conv2d(self.channels, 1, kernel_size=1)),
+                )
+                for i in range(resstack_depth)
+            ]
+        )
 
     def forward(self, tensor):
         x = tensor.unsqueeze(1)
@@ -776,7 +897,9 @@ class FiLM(nn.Module):
     def __init__(self, input_dim, attribute_dim):
         super().__init__()
         self.input_dim = input_dim
-        self.generator = nn.Conv1d(attribute_dim, input_dim * 2, kernel_size=3, padding=1)
+        self.generator = nn.Conv1d(
+            attribute_dim, input_dim * 2, kernel_size=3, padding=1
+        )
 
     def forward(self, x, c):
         """
@@ -799,7 +922,11 @@ class FiLMConv1d(nn.Module):
         self.loop = loop
         self.mlps = nn.ModuleList(
             [nn.Conv1d(in_size, out_size, kernel_size=3, padding=1)]
-            + [nn.Conv1d(out_size, out_size, kernel_size=3, padding=1) for i in range(loop - 1)])
+            + [
+                nn.Conv1d(out_size, out_size, kernel_size=3, padding=1)
+                for i in range(loop - 1)
+            ]
+        )
         self.films = nn.ModuleList([FiLM(out_size, attribute_dim) for i in range(loop)])
         self.ins_norm = ins_norm
         if self.ins_norm:

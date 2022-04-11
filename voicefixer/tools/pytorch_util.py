@@ -4,43 +4,52 @@ import numpy as np
 
 
 def check_cuda_availability(cuda):
-    if(cuda and not torch.cuda.is_available()):
+    if cuda and not torch.cuda.is_available():
         raise RuntimeError("Error: You set cuda=True but no cuda device found.")
 
+
 def try_tensor_cuda(tensor, cuda):
-    if(cuda and torch.cuda.is_available()):
+    if cuda and torch.cuda.is_available():
         return tensor.cuda()
     else:
         return tensor.cpu()
 
+
 def to_log(input):
-    assert torch.sum(input < 0) == 0, str(input)+" has negative values counts "+str(torch.sum(input < 0))
+    assert torch.sum(input < 0) == 0, (
+        str(input) + " has negative values counts " + str(torch.sum(input < 0))
+    )
     return torch.log10(torch.clip(input, min=1e-8))
 
+
 def from_log(input):
-    input = torch.clip(input,min=-np.inf, max=5)
-    return 10 ** input
+    input = torch.clip(input, min=-np.inf, max=5)
+    return 10**input
+
 
 def move_data_to_device(x, device):
-    if 'float' in str(x.dtype):
+    if "float" in str(x.dtype):
         x = torch.Tensor(x)
-    elif 'int' in str(x.dtype):
+    elif "int" in str(x.dtype):
         x = torch.LongTensor(x)
     else:
         return x
     return x.to(device)
 
+
 def tensor2numpy(tensor):
-    if("cuda" in str(tensor.device)):
+    if "cuda" in str(tensor.device):
         return tensor.detach().cpu().numpy()
     else:
         return tensor.detach().numpy()
+
 
 def count_parameters(model):
     for p in model.parameters():
         if p.requires_grad:
             print(p.shape)
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
 
 def count_flops(model, audio_length):
     multiply_adds = False
@@ -50,8 +59,12 @@ def count_flops(model, audio_length):
         batch_size, input_channels, input_height, input_width = input[0].size()
         output_channels, output_height, output_width = output[0].size()
 
-        kernel_ops = self.kernel_size[0] * self.kernel_size[1] * (self.in_channels / self.groups) * (
-            2 if multiply_adds else 1)
+        kernel_ops = (
+            self.kernel_size[0]
+            * self.kernel_size[1]
+            * (self.in_channels / self.groups)
+            * (2 if multiply_adds else 1)
+        )
         bias_ops = 1 if self.bias is not None else 0
 
         params = output_channels * (kernel_ops + bias_ops)
@@ -65,7 +78,11 @@ def count_flops(model, audio_length):
         batch_size, input_channels, input_length = input[0].size()
         output_channels, output_length = output[0].size()
 
-        kernel_ops = self.kernel_size[0] * (self.in_channels / self.groups) * (2 if multiply_adds else 1)
+        kernel_ops = (
+            self.kernel_size[0]
+            * (self.in_channels / self.groups)
+            * (2 if multiply_adds else 1)
+        )
         bias_ops = 1 if self.bias is not None else 0
 
         params = output_channels * (kernel_ops + bias_ops)
@@ -140,7 +157,7 @@ def count_flops(model, audio_length):
             elif isinstance(net, nn.AvgPool1d) or isinstance(net, nn.MaxPool1d):
                 net.register_forward_hook(pooling1d_hook)
             else:
-                print('Warning: flop of module {} is not counted!'.format(net))
+                print("Warning: flop of module {} is not counted!".format(net))
             return
         for c in childrens:
             foo(c)
@@ -150,7 +167,14 @@ def count_flops(model, audio_length):
     input = torch.rand(1, audio_length, 2)
     out = model(input)
 
-    total_flops = sum(list_conv2d) + sum(list_conv1d) + sum(list_linear) + \
-                  sum(list_bn) + sum(list_relu) + sum(list_pooling2d) + sum(list_pooling1d)
+    total_flops = (
+        sum(list_conv2d)
+        + sum(list_conv1d)
+        + sum(list_linear)
+        + sum(list_bn)
+        + sum(list_relu)
+        + sum(list_pooling2d)
+        + sum(list_pooling1d)
+    )
 
     return total_flops
