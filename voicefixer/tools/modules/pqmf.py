@@ -16,12 +16,6 @@ from scipy.io import loadmat
 
 
 def load_mat2numpy(fname=""):
-    '''
-    Args:
-        fname: pth to mat
-        type:
-    Returns: dic object
-    '''
     if (len(fname) == 0):
         return None
     else:

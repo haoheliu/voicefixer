@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import librosa.display
 from voicefixer.vocoder.base import Vocoder
 from voicefixer.tools.pytorch_util import *
-# from voicefixer.models.restorer.mel_denoiser.model_kqq import UNetResComplex_100Mb
 from voicefixer.restorer.model_kqq_bn import UNetResComplex_100Mb
 from voicefixer.tools.random_ import *
 from voicefixer.tools.wav import *
