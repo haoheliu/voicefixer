@@ -44,7 +44,9 @@ pip install streamlit
 # Run streamlit 
 streamlit run test/streamlit.py
 ```
-**Important:** When you run the above command for the first time, the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
+**Important:** 
+1. **Linux and MacOS are the recommand systems for this repo**. The code is not extensively tested on Windows system and may have potential problems. 
+2. When you run the above command for the first time, the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
  
 
 ### Python Examples 
