@@ -37,6 +37,8 @@ You can test audio samples on your desktop by running website (powered by [strea
 git clone https://github.com/haoheliu/voicefixer.git
 cd voicefixer
 ```
+**For windows users**, please make sure you have installed [WGET](https://eternallybored.org/misc/wget) and added the wget command to the system path (thanks @justinjohn0306).
+
 2. Initialize and start web page.
 ```shell script
 # Install additional web package
@@ -44,9 +46,7 @@ pip install streamlit
 # Run streamlit 
 streamlit run test/streamlit.py
 ```
-**Important:** 
-1. **Linux and MacOS are the recommand systems for this repo**. The code is not extensively tested on Windows system and may have potential problems. 
-2. When you run the above command for the first time, the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
+When you run the above command for the first time, the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
  
 
 ### Python Examples 
