@@ -41,6 +41,7 @@ REQUIRED = [
     "progressbar",
     "torchlibrosa==0.0.7",
     "GitPython",
+    "pyyaml"
 ]
 
 # What packages are optional?
