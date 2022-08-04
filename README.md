@@ -18,6 +18,19 @@ This package provides:
 
 ![main](test/figure.png)
 
+- If you found this repo helpful, please consider citing
+
+```bib
+ @misc{liu2021voicefixer,   
+     title={VoiceFixer: Toward General Speech Restoration With Neural Vocoder},   
+     author={Haohe Liu and Qiuqiang Kong and Qiao Tian and Yan Zhao and DeLiang Wang and Chuanzeng Huang and Yuxuan Wang},  
+     year={2021},  
+     eprint={2109.13731},  
+     archivePrefix={arXiv},  
+     primaryClass={cs.SD}  
+ }
+```
+
 ## Demo
 
 Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to view what voicefixer can do.
@@ -27,7 +40,7 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 
 First, install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.0.17
+pip install voicefixer==0.0.18
 ```
 
 You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
@@ -46,14 +59,18 @@ pip install streamlit
 # Run streamlit 
 streamlit run test/streamlit.py
 ```
-When you run the above command for the first time, the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
- 
+
+- If you run for the first time: the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
+
+- You can use [this low quality speech file](https://github.com/haoheliu/voicefixer/blob/main/test/utterance/original/original.flac) we provided for a test run. The page after processing will look like the following.
+
+<p align="center"><img src="test/streamlit.png" alt="figure" width="400"/></p>
 
 ### Python Examples 
 
 First, install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.0.17
+pip install voicefixer==0.0.18
 ```
 
 Then run the following scripts for a test run:
@@ -143,22 +160,9 @@ Note:
 ## Materials
 - Voicefixer training: https://github.com/haoheliu/voicefixer_main.git
 - Demo page: https://haoheliu.github.io/demopage-voicefixer/ 
-- If you found this repo helpful, please consider citing
-
-```bib
- @misc{liu2021voicefixer,   
-     title={VoiceFixer: Toward General Speech Restoration With Neural Vocoder},   
-     author={Haohe Liu and Qiuqiang Kong and Qiao Tian and Yan Zhao and DeLiang Wang and Chuanzeng Huang and Yuxuan Wang},  
-     year={2021},  
-     eprint={2109.13731},  
-     archivePrefix={arXiv},  
-     primaryClass={cs.SD}  
- }
-```
 
 [![46dnPO.png](https://z3.ax1x.com/2021/09/26/46dnPO.png)](https://imgtu.com/i/46dnPO)
 [![46dMxH.png](https://z3.ax1x.com/2021/09/26/46dMxH.png)](https://imgtu.com/i/46dMxH)
-
 
 
 
