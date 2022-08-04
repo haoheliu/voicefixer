@@ -66,13 +66,11 @@ streamlit run test/streamlit.py
 
 <p align="center"><img src="test/streamlit.png" alt="figure" width="400"/></p>
 
-
-
 ### Python Examples 
 
 First, install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.0.17
+pip install voicefixer==0.0.18
 ```
 
 Then run the following scripts for a test run:
