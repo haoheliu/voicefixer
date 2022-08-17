@@ -66,6 +66,10 @@ streamlit run test/streamlit.py
 
 <p align="center"><img src="test/streamlit.png" alt="figure" width="400"/></p>
 
+- For users from main land China, if you experience difficulty on downloading checkpoint. You can access them alternatively on [百度网盘](https://pan.baidu.com/s/194ufkUR_PYf1nE1KqkEZjQ) (提取密码: qis6). Please download the two checkpoints inside and place them in the following folder.
+  - Place **vf.ckpt** inside *~/.cache/voicefixer/analysis_module/checkpoints*. (The "~" represents your home directory)
+  - Place **model.ckpt-1490000_trimed.pt** inside *~/.cache/voicefixer/synthesis_module/44100*. (The "~" represents your home directory)
+
 ### Python Examples 
 
 First, install voicefixer via pip:

@@ -4,7 +4,6 @@ import torch.nn as nn
 import numpy as np
 from voicefixer.tools.modules.pqmf import PQMF
 
-
 class FDomainHelper(nn.Module):
     def __init__(
         self,
@@ -19,6 +18,7 @@ class FDomainHelper(nn.Module):
     ):
         super(FDomainHelper, self).__init__()
         self.subband = subband
+        # assert torchlibrosa.__version__ == "0.0.7", "Error: Found torchlibrosa version %s. Please install 0.0.7 version of torchlibrosa by: pip install torchlibrosa==0.0.7." % torchlibrosa.__version__
         if self.subband is None:
             self.stft = STFT(
                 n_fft=window_size,
