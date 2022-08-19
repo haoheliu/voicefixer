@@ -84,7 +84,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mode", help="mode", choices=["0", "1", "2", "all"], default="0"
     )
-    # parser.add_argument('--cuda', help='Set this flag if you want to use your gpu. Will use gpu by default if we found one.', default=True, action="store_true")
+    parser.add_argument('--disable-cuda', help='Set this flag if you do not want to use your gpu.', default=False, action="store_true")
     parser.add_argument(
         "--silent",
         help="Set this flag if you do not want to see any message.",
@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if torch.cuda.is_available():
+    if torch.cuda.is_available() and not args.disable_cuda:
         cuda = True
     else:
         cuda = False
