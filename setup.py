@@ -31,7 +31,7 @@ URL = "https://github.com/haoheliu/voicefixer"
 EMAIL = "haoheliu@gmail.com"
 AUTHOR = "Haohe Liu"
 REQUIRES_PYTHON = ">=3.7.0"
-VERSION = "0.0.18"
+VERSION = "0.1.0"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
@@ -145,4 +145,5 @@ setup(
     cmdclass={
         "upload": UploadCommand,
     },
+    scripts=['bin/voicefixer']
 )

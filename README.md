@@ -4,6 +4,7 @@
   - [Demo](#demo)
   - [Usage](#usage)
     - [Desktop App](#desktop-app)
+    - [Command line](#command-line)
     - [Python Examples](#python-examples)
     - [Others Features](#others-features)
   - [Materials](#materials)
@@ -40,7 +41,7 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 
 First, install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.0.18
+pip install voicefixer==0.1.0
 ```
 
 You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
@@ -70,11 +71,45 @@ streamlit run test/streamlit.py
   - Place **vf.ckpt** inside *~/.cache/voicefixer/analysis_module/checkpoints*. (The "~" represents your home directory)
   - Place **model.ckpt-1490000_trimed.pt** inside *~/.cache/voicefixer/synthesis_module/44100*. (The "~" represents your home directory)
 
+### Command line
+
+First, install voicefixer via pip:
+```shell
+pip install voicefixer==0.1.0
+```
+
+Process a file:
+```shell
+voicefixer --infile /path/to/input.wav --outfile /path/to/output.wav
+```
+
+Process files in a folder:
+```shell
+voicefixer --infolder /path/to/input --outfolder /path/to/output
+```
+
+Change mode (The default mode is 0):
+```shell
+voicefixer --infile /path/to/input.wav --outfile /path/to/output.wav --mode 1
+```
+
+Run all modes:
+```shell
+# output file saved to `/path/to/output-modeX.wav`.
+voicefixer --infile /path/to/input.wav --outfile /path/to/output.wav --mode all
+```
+
+For more helper information please run:
+
+```shell
+voicefixer -h
+```
+
 ### Python Examples 
 
 First, install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.0.18
+pip install voicefixer==0.1.0
 ```
 
 Then run the following scripts for a test run:
