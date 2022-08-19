@@ -1,0 +1,26 @@
+#!/usr/bin/python3
+import os.path
+import argparse
+from voicefixer import VoiceFixer
+
+parser = argparse.ArgumentParser(description='VoiceFixer - restores degraded speech')
+parser.add_argument('infile', metavar='-i', help='input file')
+parser.add_argument('outfile', metavar='-o', help='output file')
+parser.add_argument('--mode', help='mode', choices=['0', '1', '2', 'all'], default='0')
+args = parser.parse_args()
+
+voicefixer = VoiceFixer()
+
+def writefile(mode, append_mode):
+    outpath=args.outfile
+    if append_mode is True:
+        outfile, outext = os.path.splitext(args.outfile)
+        outpath="{}-mode{}{}".format(outfile, mode, outext)
+    print("Processing {}, mode={}".format(args.infile, mode))
+    voicefixer.restore(input=args.infile, output=outpath, cuda=False, mode=int(mode))
+
+if args.mode=='all':
+    for file_mode in range(3):
+        writefile(file_mode, True)
+else:
+    writefile(args.mode, False)

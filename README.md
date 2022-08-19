@@ -4,6 +4,7 @@
   - [Demo](#demo)
   - [Usage](#usage)
     - [Desktop App](#desktop-app)
+    - [Command line](#command-line)
     - [Python Examples](#python-examples)
     - [Others Features](#others-features)
   - [Materials](#materials)
@@ -69,6 +70,30 @@ streamlit run test/streamlit.py
 - For users from main land China, if you experience difficulty on downloading checkpoint. You can access them alternatively on [百度网盘](https://pan.baidu.com/s/194ufkUR_PYf1nE1KqkEZjQ) (提取密码: qis6). Please download the two checkpoints inside and place them in the following folder.
   - Place **vf.ckpt** inside *~/.cache/voicefixer/analysis_module/checkpoints*. (The "~" represents your home directory)
   - Place **model.ckpt-1490000_trimed.pt** inside *~/.cache/voicefixer/synthesis_module/44100*. (The "~" represents your home directory)
+
+### Command line
+
+First, install voicefixer via pip:
+```shell script
+pip install voicefixer==0.0.18
+```
+
+Then run the following command to process a file:
+```
+voicefixer /path/to/input.wav /path/to/output.wav
+```
+
+The default mode is 0, but this can be changed:
+```
+voicefixer /path/to/input.wav /path/to/output.wav --mode 1
+```
+
+or you can run all modes with:
+```
+voicefixer /path/to/input.wav /path/to/output.wav --mode all
+```
+
+which saves the output to `/path/to/output-modeX.wav`.
 
 ### Python Examples 
 
