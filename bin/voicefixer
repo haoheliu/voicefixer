@@ -25,7 +25,7 @@ def check_arguments(args):
     #         "Error: You should give the input and output folder path at the same time. The input and output folder path we receive is %s and %s" % (args.infolder, args.outfolder)
     assert (
         process_file or process_folder
-    ), "Error: You need to specify a input file path (--infile) or a input folder path (--infolder) to proceed."
+    ), "Error: You need to specify a input file path (--infile) or a input folder path (--infolder) to proceed. For more information please run: voicefixer -h"
 
     # if(args.cuda and not torch.cuda.is_available()):
     #     print("Warning: You set --cuda while no cuda device found on your machine. We will use CPU instead.")

@@ -41,6 +41,7 @@ REQUIRED = [
     "progressbar",
     "torchlibrosa==0.0.7",
     "GitPython",
+    "streamlit>=1.12.0"
     "pyyaml",
 ]
 

@@ -55,8 +55,6 @@ cd voicefixer
 
 2. Initialize and start web page.
 ```shell script
-# Install additional web package
-pip install streamlit
 # Run streamlit 
 streamlit run test/streamlit.py
 ```
