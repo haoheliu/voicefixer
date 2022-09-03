@@ -41,7 +41,7 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 
 First, install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.1.1
+pip install voicefixer==0.1.2
 ```
 
 You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
@@ -63,7 +63,7 @@ streamlit run test/streamlit.py
 
 - If you run for the first time: the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
 
-- You can use [this low quality speech file](https://github.com/haoheliu/voicefixer/blob/main/test/utterance/original/original.flac) we provided for a test run. The page after processing will look like the following.
+- You can use [this low quality speech file](https://github.com/haoheliu/voicefixer/blob/main/test/utterance/original/original.wav) we provided for a test run. The page after processing will look like the following.
 
 <p align="center"><img src="test/streamlit.png" alt="figure" width="400"/></p>
 
@@ -75,7 +75,7 @@ streamlit run test/streamlit.py
 
 First, install voicefixer via pip:
 ```shell
-pip install voicefixer==0.1.1
+pip install voicefixer==0.1.2
 ```
 
 Process a file:
@@ -109,7 +109,7 @@ voicefixer -h
 
 First, install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.1.1
+pip install voicefixer==0.1.2
 ```
 
 Then run the following scripts for a test run:
