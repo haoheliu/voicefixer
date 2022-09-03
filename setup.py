@@ -145,5 +145,5 @@ setup(
     cmdclass={
         "upload": UploadCommand,
     },
-    scripts=['bin/voicefixer']
+    scripts=['bin/voicefixer.cmd']
 )
