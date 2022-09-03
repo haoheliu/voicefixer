@@ -79,7 +79,10 @@ pip install voicefixer==0.1.2
 
 Process a file:
 ```shell
-voicefixer --infile /path/to/input.wav --outfile /path/to/output.wav
+# Specify the input .wav file. Output file is outfile.wav.
+voicefixer --infile test/utterance/original/original.wav
+# Or specify a output path
+voicefixer --infile test/utterance/original/original.wav --outfile test/utterance/original/original_processed.wav
 ```
 
 Process files in a folder:
