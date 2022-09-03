@@ -78,7 +78,7 @@ voicefixer -h
 
 ### Desktop App
 
-[Demo on Youtube](https://www.youtube.com/watch?v=d_j8UKTZ7J8)
+[Demo on Youtube](https://www.youtube.com/watch?v=d_j8UKTZ7J8) (Thanks @Justin John)
 
 Install voicefixer via pip:
 ```shell script
