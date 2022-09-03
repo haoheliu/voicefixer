@@ -31,7 +31,7 @@ URL = "https://github.com/haoheliu/voicefixer"
 EMAIL = "haoheliu@gmail.com"
 AUTHOR = "Haohe Liu"
 REQUIRES_PYTHON = ">=3.7.0"
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
@@ -41,6 +41,7 @@ REQUIRED = [
     "progressbar",
     "torchlibrosa==0.0.7",
     "GitPython",
+    "streamlit>=1.12.0"
     "pyyaml",
 ]
 
@@ -145,5 +146,5 @@ setup(
     cmdclass={
         "upload": UploadCommand,
     },
-    scripts=['bin/voicefixer']
+    scripts=['bin/voicefixer.cmd', "bin/voicefixer"]
 )
