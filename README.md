@@ -78,7 +78,9 @@ voicefixer -h
 
 ### Desktop App
 
-First, install voicefixer via pip:
+[Demo on Youtube](https://www.youtube.com/watch?v=d_j8UKTZ7J8)
+
+Install voicefixer via pip:
 ```shell script
 pip install voicefixer==0.1.2
 ```
@@ -93,7 +95,7 @@ cd voicefixer
 :warning: **For windows users**, please make sure you have installed [WGET](https://eternallybored.org/misc/wget) and added the wget command to the system path (thanks @justinjohn0306).
 
 
-1. Initialize and start web page.
+2. Initialize and start web page.
 ```shell script
 # Run streamlit 
 streamlit run test/streamlit.py
