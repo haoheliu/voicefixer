@@ -8,6 +8,7 @@
     - [Python Examples](#python-examples)
     - [Others Features](#others-features)
   - [Materials](#materials)
+  - [Change log](#change-log)
   
 # VoiceFixer
 
@@ -202,7 +203,9 @@ Note:
 [![46dMxH.png](https://z3.ax1x.com/2021/09/26/46dMxH.png)](https://imgtu.com/i/46dMxH)
 
 
-
+## Change log
+- 2022-09-03: Fix bugs on commandline voicefixer for windows users.
+- 2022-08-18: Add commandline voicefixer tool to the pip package.
 
 
 
