@@ -1,18 +1,18 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2109.13731-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2109.13731) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HYYUepIsl2aXsdET6P_AmNVXuWP1MCMf?usp=sharing) [![PyPI version](https://badge.fury.io/py/voicefixer.svg)](https://badge.fury.io/py/voicefixer) [![githubio](https://img.shields.io/badge/GitHub.io-Audio_Samples-blue?logo=Github&style=flat-square)](https://haoheliu.github.io/demopage-voicefixer)[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97-Models%20on%20Hub-yellow)](https://huggingface.co/spaces/akhaliq/VoiceFixer)
 
-- [VoiceFixer](#voicefixer)
+- [:speaking_head: VoiceFixer](#speaking_head-voicefixer)
   - [Demo](#demo)
   - [Usage](#usage)
-    - [Desktop App](#desktop-app)
     - [Command line](#command-line)
+    - [Desktop App](#desktop-app)
     - [Python Examples](#python-examples)
     - [Others Features](#others-features)
   - [Materials](#materials)
   - [Change log](#change-log)
   
-# VoiceFixer
+# :speaking_head: VoiceFixer 
 
-*Voicefixer* aims at the restoration of human speech regardless how serious its degraded. It can handle noise, reveberation, low resolution (2kHz~44.1kHz) and clipping (0.1-1.0 threshold) effect within one model.
+ *Voicefixer* aims at the restoration of human speech regardless how serious its degraded. It can handle noise, reveberation, low resolution (2kHz~44.1kHz) and clipping (0.1-1.0 threshold) effect within one model.
 
 This package provides: 
 - A pretrained *Voicefixer*, which is build based on neural vocoder.
@@ -38,38 +38,6 @@ This package provides:
 Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to view what voicefixer can do.
 
 ## Usage
-### Desktop App
-
-First, install voicefixer via pip:
-```shell script
-pip install voicefixer==0.1.2
-```
-
-You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
-
-1. Clone the repo first.
-```shell script
-git clone https://github.com/haoheliu/voicefixer.git
-cd voicefixer
-```
-:warning: **For windows users**, please make sure you have installed [WGET](https://eternallybored.org/misc/wget) and added the wget command to the system path (thanks @justinjohn0306).
-
-
-1. Initialize and start web page.
-```shell script
-# Run streamlit 
-streamlit run test/streamlit.py
-```
-
-- If you run for the first time: the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
-
-- You can use [this low quality speech file](https://github.com/haoheliu/voicefixer/blob/main/test/utterance/original/original.wav) we provided for a test run. The page after processing will look like the following.
-
-<p align="center"><img src="test/streamlit.png" alt="figure" width="400"/></p>
-
-- For users from main land China, if you experience difficulty on downloading checkpoint. You can access them alternatively on [百度网盘](https://pan.baidu.com/s/194ufkUR_PYf1nE1KqkEZjQ) (提取密码: qis6). Please download the two checkpoints inside and place them in the following folder.
-  - Place **vf.ckpt** inside *~/.cache/voicefixer/analysis_module/checkpoints*. (The "~" represents your home directory)
-  - Place **model.ckpt-1490000_trimed.pt** inside *~/.cache/voicefixer/synthesis_module/44100*. (The "~" represents your home directory)
 
 ### Command line
 
@@ -107,6 +75,39 @@ For more helper information please run:
 ```shell
 voicefixer -h
 ```
+
+### Desktop App
+
+First, install voicefixer via pip:
+```shell script
+pip install voicefixer==0.1.2
+```
+
+You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
+
+1. Clone the repo first.
+```shell script
+git clone https://github.com/haoheliu/voicefixer.git
+cd voicefixer
+```
+:warning: **For windows users**, please make sure you have installed [WGET](https://eternallybored.org/misc/wget) and added the wget command to the system path (thanks @justinjohn0306).
+
+
+1. Initialize and start web page.
+```shell script
+# Run streamlit 
+streamlit run test/streamlit.py
+```
+
+- If you run for the first time: the web page may leave blank for several minutes for downloading models. You can checkout the terminal for downloading progresses.  
+
+- You can use [this low quality speech file](https://github.com/haoheliu/voicefixer/blob/main/test/utterance/original/original.wav) we provided for a test run. The page after processing will look like the following.
+
+<p align="center"><img src="test/streamlit.png" alt="figure" width="400"/></p>
+
+- For users from main land China, if you experience difficulty on downloading checkpoint. You can access them alternatively on [百度网盘](https://pan.baidu.com/s/194ufkUR_PYf1nE1KqkEZjQ) (提取密码: qis6). Please download the two checkpoints inside and place them in the following folder.
+  - Place **vf.ckpt** inside *~/.cache/voicefixer/analysis_module/checkpoints*. (The "~" represents your home directory)
+  - Place **model.ckpt-1490000_trimed.pt** inside *~/.cache/voicefixer/synthesis_module/44100*. (The "~" represents your home directory)
 
 ### Python Examples 
 
