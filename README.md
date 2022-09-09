@@ -12,7 +12,7 @@
   
 # :speaking_head: :wrench: VoiceFixer 
 
- *Voicefixer* aims at the restoration of human speech regardless how serious its degraded. It can handle noise, reveberation, low resolution (2kHz~44.1kHz) and clipping (0.1-1.0 threshold) effect within one model.
+ *Voicefixer* aims to restore human speech regardless how serious its degraded. It can handle noise, reveberation, low resolution (2kHz~44.1kHz) and clipping (0.1-1.0 threshold) effect within one model.
 
 This package provides: 
 - A pretrained *Voicefixer*, which is build based on neural vocoder.
