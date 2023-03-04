@@ -20,7 +20,7 @@ This package provides:
 
 ![main](test/figure.png)
 
-- If you found this repo helpful, please consider citing
+- If you found this repo helpful, please consider citing or [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/haoheliuP)
 
 ```bib
  @misc{liu2021voicefixer,   
