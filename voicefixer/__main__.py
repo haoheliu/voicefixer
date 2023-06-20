@@ -136,17 +136,17 @@ if __name__ == "__main__":
             )
 
     if process_folder:
+        files = [
+            file
+            for file in os.listdir(args.infolder)
+            if (os.path.splitext(os.path.basename(file))[-1] == ".wav")
+        ]
         if not args.silent:
-            files = [
-                file
-                for file in os.listdir(args.infolder)
-                if (os.path.splitext(os.path.basename(file))[-1] == ".wav")
-            ]
             print(
                 "Found %s .wav files in the input folder %s. Start processing."
                 % (len(files), args.infolder)
             )
-        for file in os.listdir(args.infolder):
+        for file in files:
             outbasename, outext = os.path.splitext(os.path.basename(file))
             in_file = os.path.join(args.infolder, file)
             out_file = os.path.join(args.outfolder, file)
