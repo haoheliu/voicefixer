@@ -23,10 +23,8 @@ class VoiceFixer(nn.Module):
         saved_state_dict = torch.load(self.analysis_module_ckpt)
         model_state_dict = self._model.state_dict()
 
-        # Create a new state dictionary containing only keys that your model expects
         new_state_dict = {k: v for k, v in saved_state_dict.items() if k in model_state_dict}
 
-        # Update your existing model's state_dict with new_state_dict
         model_state_dict.update(new_state_dict)
         self._model.load_state_dict(model_state_dict, strict=False)
         self._model.eval()
