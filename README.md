@@ -262,5 +262,5 @@ Note:
 
 
 ## Change log
-- 2022-09-03: Fix bugs on commandline voicefixer for windows users.
-- 2022-08-18: Add commandline voicefixer tool to the pip package.
+
+See [CHANGELOG.md](CHANGELOG.md).
