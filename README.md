@@ -6,6 +6,7 @@
     - [Command line](#command-line)
     - [Desktop App](#desktop-app)
     - [Python Examples](#python-examples)
+    - [Docker](#docker)
     - [Others Features](#others-features)
   - [Materials](#materials)
   - [Change log](#change-log)
@@ -39,11 +40,20 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 
 ## Usage
 
+### Run Modes
+
+| Mode | Description |
+| ---- | ----------- |
+| `0`    | Original Model (suggested by default) |
+| `1`    | Add preprocessing module (remove higher frequency) |
+| `2`    | Train mode (might work sometimes on seriously degraded real speech) |
+| `all`  | Run all modes - will output 1 wav file for each supported mode. |
+
 ### Command line
 
 First, install voicefixer via pip:
 ```shell
-pip install voicefixer==0.1.2
+pip install voicefixer
 ```
 
 Process a file:
@@ -70,6 +80,11 @@ Run all modes:
 voicefixer --infile /path/to/input.wav --outfile /path/to/output.wav --mode all
 ```
 
+Pre-load the weights only without any actual processing:
+```shell
+voicefixer --weight_prepare
+```
+
 For more helper information please run:
 
 ```shell
@@ -82,7 +97,7 @@ voicefixer -h
 
 Install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.1.2
+pip install voicefixer
 ```
 
 You can test audio samples on your desktop by running website (powered by [streamlit](https://streamlit.io/))
@@ -115,7 +130,7 @@ streamlit run test/streamlit.py
 
 First, install voicefixer via pip:
 ```shell script
-pip install voicefixer==0.1.2
+pip install voicefixer
 ```
 
 Then run the following scripts for a test run:
@@ -174,6 +189,42 @@ vocoder.oracle(fpath=os.path.join(git_root,"test/utterance/original/p360_001_mic
 
 You can clone this repo and try to run test.py inside the *test* folder.
 
+### Docker
+
+> Currently the the Docker image is not published and needs to be built locally, but this way you make sure you're running it with all the expected configuration.
+> The generated image size is about 10GB and that is mainly due to the dependencies that consume around 9.8GB on their own.
+
+> However, the layer containing `voicefixer` is the last added layer, making any rebuild if you change sources relatively small (~200MB at a time as the weights get refreshed on image build).
+
+The `Dockerfile` can be viewed [here](Dockerfile).
+
+After cloning the repo:
+
+#### OS Agnostic
+
+```shell
+# To build the image
+cd voicefixer
+docker build -t voicefixer:cpu .
+
+# To run the image
+docker run --rm -v "$(pwd)/data:/opt/voicefixer/data" voicefixer:cpu <all_other_cli_args_here>
+
+## Example: docker run --rm -v "$(pwd)/data:/opt/voicefixer/data" voicefixer:cpu --infile data/my-input.wav --outfile data/my-output.mode-all.wav --mode all
+```
+
+#### Wrapper script: Linux and MacOS
+```bash
+# To build the image
+cd voicefixer
+./docker-build-local.sh
+
+# To run the image
+./run.sh <all_other_cli_args_here>
+
+## Example: ./run.sh --infile data/my-input.wav --outfile data/my-output.mode-all.wav --mode all
+```
+
 ### Others Features
 
 - How to use your own vocoder, like pre-trained HiFi-Gan?
@@ -213,9 +264,3 @@ Note:
 ## Change log
 - 2022-09-03: Fix bugs on commandline voicefixer for windows users.
 - 2022-08-18: Add commandline voicefixer tool to the pip package.
-
-
-
-
-
-

@@ -91,6 +91,12 @@ if __name__ == "__main__":
         default=False,
         action="store_true",
     )
+    parser.add_argument(
+        "--weight_prepare",
+        help="Set this flag if you only want to trigger the weights download check without any other execution.",
+        default=False,
+        action="store_true",
+    )
 
     args = parser.parse_args()
 
@@ -98,6 +104,9 @@ if __name__ == "__main__":
         cuda = True
     else:
         cuda = False
+
+    if args.weight_prepare:
+        exit(0)
 
     process_file, process_folder = check_arguments(args)
 

@@ -417,7 +417,7 @@ class DownsampleNet(nn.Module):
             padding=upsample_factor // 2 + upsample_factor % 2,
         )
 
-        self.layer = nn.utils.weight_norm(layer)
+        self.layer = nn.utils.parametrizations.weight_norm(layer)
 
     def forward(self, inputs):
         B, C, T = inputs.size()
@@ -456,16 +456,16 @@ class UpsampleNet(nn.Module):
                 padding=upsample_factor // 2 + upsample_factor % 2,
                 output_padding=upsample_factor % 2,
             )
-            self.layer = nn.utils.weight_norm(layer)
+            self.layer = nn.utils.parametrizations.weight_norm(layer)
         else:
             self.layer = nn.Sequential(
                 nn.ReflectionPad1d(1),
-                nn.utils.weight_norm(
+                nn.utils.parametrizations.weight_norm(
                     nn.Conv1d(input_size, output_size * upsample_factor, kernel_size=3)
                 ),
                 nn.LeakyReLU(),
                 nn.ReflectionPad1d(1),
-                nn.utils.weight_norm(
+                nn.utils.parametrizations.weight_norm(
                     nn.Conv1d(
                         output_size * upsample_factor,
                         output_size * upsample_factor,
@@ -474,7 +474,7 @@ class UpsampleNet(nn.Module):
                 ),
                 nn.LeakyReLU(),
                 nn.ReflectionPad1d(1),
-                nn.utils.weight_norm(
+                nn.utils.parametrizations.weight_norm(
                     nn.Conv1d(
                         output_size * upsample_factor,
                         output_size * upsample_factor,
@@ -540,7 +540,7 @@ class ResStack(nn.Module):
             return int((kernel_size * dilation - dilation) / 2)
 
         if self.use_shift_scale:
-            self.scale_conv = nn.utils.weight_norm(
+            self.scale_conv = nn.utils.parametrizations.weight_norm(
                 nn.Conv1d(
                     channel, 2 * channel, kernel_size=kernel_size, dilation=1, padding=1
                 )
@@ -551,7 +551,7 @@ class ResStack(nn.Module):
                 [
                     nn.Sequential(
                         nn.LeakyReLU(),
-                        nn.utils.weight_norm(
+                        nn.utils.parametrizations.weight_norm(
                             nn.Conv1d(
                                 channel,
                                 channel,
@@ -561,7 +561,7 @@ class ResStack(nn.Module):
                             )
                         ),
                         nn.LeakyReLU(),
-                        nn.utils.weight_norm(
+                        nn.utils.parametrizations.weight_norm(
                             nn.Conv1d(
                                 channel,
                                 channel,
@@ -746,7 +746,7 @@ class Conv(nn.Module):
             dilation=dilation,
             padding=self.padding,
         )
-        self.conv = nn.utils.weight_norm(self.conv)
+        self.conv = nn.utils.parametrizations.weight_norm(self.conv)
         nn.init.kaiming_normal_(self.conv.weight)
 
     def forward(self, tensor):
@@ -786,14 +786,14 @@ class ResBlock(nn.Module):
         )
         self.res_conv = nn.Conv1d(out_channels, in_channels, kernel_size=1)
         self.skip_conv = nn.Conv1d(out_channels, skip_channels, kernel_size=1)
-        self.res_conv = nn.utils.weight_norm(self.res_conv)
-        self.skip_conv = nn.utils.weight_norm(self.skip_conv)
+        self.res_conv = nn.utils.parametrizations.weight_norm(self.res_conv)
+        self.skip_conv = nn.utils.parametrizations.weight_norm(self.skip_conv)
 
         if self.local_conditioning:
             self.filter_conv_c = nn.Conv1d(cin_channels, out_channels, kernel_size=1)
             self.gate_conv_c = nn.Conv1d(cin_channels, out_channels, kernel_size=1)
-            self.filter_conv_c = nn.utils.weight_norm(self.filter_conv_c)
-            self.gate_conv_c = nn.utils.weight_norm(self.gate_conv_c)
+            self.filter_conv_c = nn.utils.parametrizations.weight_norm(self.filter_conv_c)
+            self.gate_conv_c = nn.utils.parametrizations.weight_norm(self.gate_conv_c)
 
     def forward(self, tensor, c=None):
         h_filter = self.filter_conv(tensor)
@@ -854,7 +854,7 @@ class ResStack2D(nn.Module):
             [
                 nn.Sequential(
                     nn.LeakyReLU(),
-                    nn.utils.weight_norm(
+                    nn.utils.parametrizations.weight_norm(
                         nn.Conv2d(
                             1,
                             self.channels,
@@ -864,7 +864,7 @@ class ResStack2D(nn.Module):
                         )
                     ),
                     nn.LeakyReLU(),
-                    nn.utils.weight_norm(
+                    nn.utils.parametrizations.weight_norm(
                         nn.Conv2d(
                             self.channels,
                             self.channels,
@@ -874,7 +874,7 @@ class ResStack2D(nn.Module):
                         )
                     ),
                     nn.LeakyReLU(),
-                    nn.utils.weight_norm(nn.Conv2d(self.channels, 1, kernel_size=1)),
+                    nn.utils.parametrizations.weight_norm(nn.Conv2d(self.channels, 1, kernel_size=1)),
                 )
                 for i in range(resstack_depth)
             ]
