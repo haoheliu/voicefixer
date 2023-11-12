@@ -20,11 +20,13 @@ class VoiceFixer(nn.Module):
             raise RuntimeError("Error 0: The checkpoint for analysis module (vf.ckpt) is not found in ~/.cache/voicefixer/analysis_module/checkpoints. \
                                 By default the checkpoint should be download automatically by this program. Something bad may happened.\
                                 But don't worry! Alternatively you can download it directly from Zenodo: https://zenodo.org/record/5600188/files/vf.ckpt?download=1.")
-        self._model.load_state_dict(
-            torch.load(
-                self.analysis_module_ckpt
-            )
-        )
+        saved_state_dict = torch.load(self.analysis_module_ckpt)
+        model_state_dict = self._model.state_dict()
+
+        new_state_dict = {k: v for k, v in saved_state_dict.items() if k in model_state_dict}
+
+        model_state_dict.update(new_state_dict)
+        self._model.load_state_dict(model_state_dict, strict=False)
         self._model.eval()
 
     def _load_wav_energy(self, path, sample_rate, threshold=0.95):
