@@ -114,12 +114,12 @@ def load_checkpoint(checkpoint_path, device):
 
 def build_mel_basis():
     return librosa.filters.mel(
-        Config.sample_rate,
-        Config.n_fft,
+        sr=Config.sample_rate,
+        n_fft=Config.n_fft,
         htk=True,
         n_mels=Config.num_mels,
         fmin=0,
-        fmax=int(Config.sample_rate // 2),
+        fmax=int(Config.sample_rate // 2)
     )
 
 
