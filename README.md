@@ -53,7 +53,7 @@ Please visit [demo page](https://haoheliu.github.io/demopage-voicefixer/) to vie
 
 First, install voicefixer via pip:
 ```shell
-pip install voicefixer
+pip install git+https://github.com/haoheliu/voicefixer.git
 ```
 
 Process a file:
