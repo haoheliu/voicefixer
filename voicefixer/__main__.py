@@ -96,7 +96,15 @@ def main():
     )
 
     parser.add_argument(
-        "--mode", help="mode", choices=["0", "1", "2", "all"], default="0"
+        "--mode",
+        help=(
+            "0: Original Model (default), "
+            "1: Add preprocessing module (remove higher frequencies), "
+            "2: Train mode (might work sometimes on seriously degraded real speech), "
+            "all: Run all modes - will output one wav file for each supported mode."
+        ),
+        choices=["0", "1", "2", "all"],
+        default="0",
     )
     parser.add_argument('--disable-cuda', help='Set this flag if you do not want to use your gpu.', default=False, action="store_true")
     parser.add_argument(
