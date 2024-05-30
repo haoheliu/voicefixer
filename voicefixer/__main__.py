@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 from genericpath import exists
 import os.path
 import argparse
