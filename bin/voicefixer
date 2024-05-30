@@ -5,6 +5,8 @@ import argparse
 from voicefixer import VoiceFixer
 import torch
 import os
+import re
+import soundfile as sf
 
 
 def writefile(infile, outfile, mode, append_mode, cuda, verbose=False):
@@ -16,6 +18,11 @@ def writefile(infile, outfile, mode, append_mode, cuda, verbose=False):
     if verbose:
         print("Processing {}, mode={}".format(infile, mode))
     voicefixer.restore(input=infile, output=outfile, cuda=cuda, mode=int(mode))
+
+def check_output_format(outfile):
+    format = re.search(r"\.(\w+)$", outfile)
+    assert format is not None, "Error: A file-extension for the outfile is missing."
+    assert format.groups()[0].upper() in sf.available_formats().keys(), "Error: Unsupported output format."
 
 def check_arguments(args):
     process_file, process_folder = len(args.infile) != 0, len(args.infolder) != 0
@@ -36,6 +43,7 @@ def check_arguments(args):
         output_dirname = os.path.dirname(args.outfile)
         if len(output_dirname) > 1:
             os.makedirs(output_dirname, exist_ok=True)
+        check_output_format(args.outfile)
     if process_folder:
         assert os.path.exists(args.infolder), (
             "Error: The input folder %s is not found." % args.infile
