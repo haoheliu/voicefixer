@@ -5,17 +5,28 @@ import argparse
 from voicefixer import VoiceFixer
 import torch
 import os
+import re
+import soundfile as sf
 
 
-def writefile(infile, outfile, mode, append_mode, cuda, verbose=False):
+def writefile(voicefixer, infile, outfile, mode, append_mode, cuda, verbose=False):
     if append_mode is True:
         outbasename, outext = os.path.splitext(os.path.basename(outfile))
         outfile = os.path.join(
             os.path.dirname(outfile), "{}-mode{}{}".format(outbasename, mode, outext)
         )
+
     if verbose:
         print("Processing {}, mode={}".format(infile, mode))
+
     voicefixer.restore(input=infile, output=outfile, cuda=cuda, mode=int(mode))
+
+
+def check_output_format(outfile):
+    format = re.search(r"\.(\w+)$", outfile)
+    assert format is not None, "Error: A file-extension for the outfile is missing."
+    assert format.groups()[0].upper() in sf.available_formats().keys(), "Error: Unsupported output format."
+
 
 def check_arguments(args):
     process_file, process_folder = len(args.infile) != 0, len(args.infolder) != 0
@@ -29,6 +40,7 @@ def check_arguments(args):
 
     # if(args.cuda and not torch.cuda.is_available()):
     #     print("Warning: You set --cuda while no cuda device found on your machine. We will use CPU instead.")
+
     if process_file:
         assert os.path.exists(args.infile), (
             "Error: The input file %s is not found." % args.infile
@@ -36,6 +48,8 @@ def check_arguments(args):
         output_dirname = os.path.dirname(args.outfile)
         if len(output_dirname) > 1:
             os.makedirs(output_dirname, exist_ok=True)
+        check_output_format(args.outfile)
+
     if process_folder:
         assert os.path.exists(args.infolder), (
             "Error: The input folder %s is not found." % args.infile
@@ -47,7 +61,7 @@ def check_arguments(args):
     return process_file, process_folder
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="VoiceFixer - restores degraded speech"
     )
@@ -127,6 +141,7 @@ if __name__ == "__main__":
         if args.mode == "all":
             for file_mode in range(3):
                 writefile(
+                    voicefixer,
                     args.infile,
                     args.outfile,
                     file_mode,
@@ -136,6 +151,7 @@ if __name__ == "__main__":
                 )
         else:
             writefile(
+                voicefixer,
                 args.infile,
                 args.outfile,
                 args.mode,
@@ -163,6 +179,7 @@ if __name__ == "__main__":
             if args.mode == "all":
                 for file_mode in range(3):
                     writefile(
+                        voicefixer,
                         in_file,
                         out_file,
                         file_mode,
@@ -172,8 +189,18 @@ if __name__ == "__main__":
                     )
             else:
                 writefile(
-                    in_file, out_file, args.mode, False, cuda, verbose=not args.silent
+                    voicefixer,
+                    in_file,
+                    out_file,
+                    args.mode,
+                    False,
+                    cuda,
+                    verbose=not args.silent
                 )
 
     if not args.silent:
         print("Done")
+
+
+if __name__ == "__main__":
+    main()
