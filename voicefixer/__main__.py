@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import time
 from genericpath import exists
 import os.path
 import argparse
@@ -19,7 +20,11 @@ def writefile(voicefixer, infile, outfile, mode, append_mode, cuda, verbose=Fals
     if verbose:
         print("Processing {}, mode={}".format(infile, mode))
 
+    start = time.time()
+
     voicefixer.restore(input=infile, output=outfile, cuda=cuda, mode=int(mode))
+
+    print("Restoration took {} s".format(round(time.time() - start, 1)))
 
 
 def check_output_format(outfile):
